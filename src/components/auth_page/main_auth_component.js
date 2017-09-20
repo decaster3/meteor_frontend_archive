@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { passwordSignin, passwordSignup, googleSignin, facebookSignin, logoutUser } from '../../actions/auth/authentication_actions';
+import PhoneContainer from '../../containers/phone_container'
 import { bindActionCreators } from 'redux';
 import * as firebase from 'firebase';
 
 let C = require("../../constants/auth/authentication.js")
+let P = require("../../constants/auth/phone.js")
 
 class MainAuthComponent extends Component {
   constructor(props){
@@ -18,12 +20,6 @@ class MainAuthComponent extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount(){
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('ivisible_recaptcha', {
-      'size': 'invisible',
-      'callback': function(response) {
-        console.log(response);
-      }
-    });
   }
 
   handleChange(event){
@@ -37,17 +33,15 @@ class MainAuthComponent extends Component {
   render(){
 		let p = this.props
     let auth = p.user;
+
 		switch(auth.currently){
 			case C.SIGNED_IN: return (
 				<div className="authpanel">
           <div id="ivisible_recaptcha"></div>
 					<span>Logged in as {auth.username}.</span>
-          <span>Email {() => {
-              if(!auth.emailVerified){
-                return ("Verify your email!")
-              }
-            }}
-          </span>
+          <span>Email {String(auth.emailVerified)}</span>
+          <span> Phone {String(auth.phoneVerified)}</span>
+          <PhoneContainer />
           {' '}<button onClick={p.logoutUser}>Log out</button>
 				</div>
 			);

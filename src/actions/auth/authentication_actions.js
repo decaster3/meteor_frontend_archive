@@ -6,6 +6,7 @@ let C = require("../../constants/auth/authentication.js")
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
 				if (user){
+					console.log(user);
 					var isPhoneVerify = false
 					if (user.phoneNumber != null){
 						isPhoneVerify = true

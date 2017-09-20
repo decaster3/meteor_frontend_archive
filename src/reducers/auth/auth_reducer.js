@@ -1,5 +1,5 @@
 let C = require("../../constants/auth/authentication.js");
-let initialState = require("./initial_state.js");
+let initialState = require("./initial_state_user.js");
 
 module.exports = function(currentstate,action){
   switch(action.type){
