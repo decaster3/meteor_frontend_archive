@@ -6,7 +6,7 @@ class MainStartPage extends Component {
       return (
         <div>
              <Link to='/menu'>Меню</Link>
-             <Link to='/sign_up'>Аутентификация</Link>
+             <Link to='/authentication'>Аутентификация</Link>
         </div>
       );
 

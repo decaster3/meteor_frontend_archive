@@ -6,6 +6,7 @@ import { routerMiddleware } from 'react-router-redux';
 import rootReducer from '../reducers';
 import reduxPromise from 'redux-promise'
 export const history = createHistory();
+
 function configureStoreProd(initialState) {
   const reactRouterMiddleware = routerMiddleware(history);
   const middlewares = [
