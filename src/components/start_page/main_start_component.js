@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class MainStartPage extends Component {
   render () {
@@ -8,8 +8,7 @@ class MainStartPage extends Component {
              <Link to='/menu'>Меню</Link>
              <Link to='/authentication'>Аутентификация</Link>
         </div>
-      );
-
+      )
   }
 }
 export default MainStartPage

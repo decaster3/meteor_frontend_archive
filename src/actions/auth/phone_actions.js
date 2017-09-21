@@ -27,19 +27,6 @@ export function afterSendVerifeingCode(code, appVerifier){
     }, function(error) {
       console.log("Account linking error", error);
     });
-    //     firebase.auth().signInWithCredential(credential).then(function(user) {
-    //     console.log("Sign In Success", user);
-    //     var currentUser = user;
-    //     return user.delete().then(function() {
-    //       console.log(1);
-    //       console.log(prevUser);
-    //       return prevUser.link(credential);
-    //     }).then(function() {
-    //     dispatch({type: C.VERIFIED, phoneNumber: firebase.auth.currentUser.phoneNumber})
-    //     return auth.signInWithCredential(credential);
-    //     });
-    //   }).catch(function(error) {
-    //   console.log("Sign In Error", error);
-    // });
+
   }
 }

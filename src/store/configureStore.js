@@ -35,7 +35,7 @@ function configureStoreDev(initialState) {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // добавление интсрументов для редакс дев
   const store = createStore(rootReducer, initialState, composeEnhancers(
     applyMiddleware(...middlewares)
-    )
+  ),window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
 
   if (module.hot) {

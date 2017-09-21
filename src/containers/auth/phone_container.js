@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { sendVerificationCode, afterSendVerifeingCode } from '../actions/auth/phone_actions'
+import { sendVerificationCode, afterSendVerifeingCode } from '../../actions/auth/phone_actions'
 import { bindActionCreators } from 'redux';
 import * as firebase from 'firebase';
 
-let P = require("../constants/auth/phone.js")
+let P = require("../../constants/auth/phone.js")
 
 class PhoneContainer extends Component {
   constructor(props){
@@ -16,7 +16,6 @@ class PhoneContainer extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
   }
-
   componentDidMount(){
     this.setState({
       appVerifier: new firebase.auth.RecaptchaVerifier('invisible-recaptcha', {'size': 'invisible'} )
