@@ -7,8 +7,8 @@ var C = require("../../constants/auth/authentication.js")
 
 class MainAuthComponent extends Component {
 
-  render(){
-    console.log(this.props);
+  render() {
+
 		var p = this.props
     var auth = p.user;
 		switch(auth.currently){

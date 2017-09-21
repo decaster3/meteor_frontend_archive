@@ -3,7 +3,7 @@ var C = require("../../constants/auth/authentication.js")
 
 module.exports = {
 	// вызывается при инициализации приложения, затем слушает на изменения
-	startListeningToAuth: function(){
+	startListeningToAuth: function() {
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
 				if (user){
@@ -25,6 +25,7 @@ module.exports = {
 		return function(dispatch,getState){
 			dispatch({type:C.ATTEMPTING_LOGIN})
       firebase.auth().signInWithPopup(provider).then(function(result) {
+				//
       }).catch(function(error) {
         console.log(error)
         dispatch({type:C.LOGOUT})
