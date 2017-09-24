@@ -16,9 +16,9 @@ module.exports = function(currentstate = initialState.products, action) {
         cards: [],
         currentCategory: ""
       };
-    case C.ADD_PRODUCTS:
+    case C.ADD_PRODUCT_TO_CART:
       return {
-        cart: action.cart
+        productsState: C.ADDED_TO_CART
       };
     default: return currentstate;
   }

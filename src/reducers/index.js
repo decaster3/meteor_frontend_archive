@@ -4,12 +4,14 @@ import ActiveBook from './reducer_active_book.js'
 import AuthReducer from './auth/auth_reducer.js'
 import CategoryReducer from './menu/category_reducer.js'
 import ProductReducer from './menu/product_reducer.js'
+import CartReducer from './cart/cart_reducer.js'
 
 const rootReducer = combineReducers({
   user: AuthReducer,
   books: BooksReducer,
   activeBook: ActiveBook,
   categories: CategoryReducer,
+  cart: CartReducer,
   products: ProductReducer
 });
 

@@ -9,7 +9,9 @@ module.exports = {
 			firebase.database().ref().child('products').child(category).once('value', snapshot => {
 			  var products = [];
 				snapshot.forEach(function(childSnapshot) {
-			      products.push(childSnapshot.val());
+						var product = childSnapshot.val();
+						product["key"] = childSnapshot.key;
+			      products.push(product);
 			  });
 
 				dispatch({
@@ -20,15 +22,13 @@ module.exports = {
 			});
     }
   },
+
 	addProductToCart: function(product, toppings) {
 		return function(dispatch, getState) {
-			console.log(getState().products);
-			var cart = getState().products.cart;
-			cart.push(product)
-			console.log(cart);
+			console.log(product);
+			console.log(toppings);
 			dispatch({
-				type: C.ADD_PRODUCTS,
-				cart: cart
+				type: C.ADD_PRODUCT_TO_CART
 			});
 		}
 	}

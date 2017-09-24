@@ -21,15 +21,18 @@ class Categories extends Component {
     var f = (this.props.loadProducts);
     var categories;
     var categoryState = this.props.categoryState;
-    
-    if (categoryState == C.LOADED) {
-      categories = this.props.categories.map(function(key, index) {
-        return <img onClick={() => f(key)} className="rounded-circle" id={key} key={index} src="http://2.bp.blogspot.com/-C6KY8tsc8Fw/T-SVFnncxjI/AAAAAAAAANw/FMiNzA8Zecw/s640/mr.bean.jpg" width="100" height="100" />
-      });
-    } else if (categoryState == C.LOADING){
-      categories = <p>LOADING ...</p>
-    } else {
-      categories = <p>NOT LOADED!</p>
+
+    switch (categoryState) {
+      case C.LOADED:
+        categories = this.props.categories.map(function(key, index) {
+          return <img onClick={() => f(key)} className="rounded-circle" id={key} key={index} src="http://2.bp.blogspot.com/-C6KY8tsc8Fw/T-SVFnncxjI/AAAAAAAAANw/FMiNzA8Zecw/s640/mr.bean.jpg" width="100" height="100" />
+        });
+        break;
+      case C.LOADING:
+        categories = <p>LOADING ...</p>
+        break;
+      default:
+        categories = <p>NOT LOADED!</p>
     }
 
     return(

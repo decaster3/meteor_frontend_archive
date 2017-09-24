@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import { addProductToCart} from '../../../actions/menu/menu_product_action.js';
+import { addProductToCart} from '../../../actions/cart/cart_actions.js';
 import { bindActionCreators } from 'redux';
 
 class Card extends Component {
@@ -18,36 +18,44 @@ class Card extends Component {
   }
 
   addProduct() {
-    this.props.addProductToCart(this.props.card, this.state.toppings)
+    this.props.addProductToCart(this.props.card, this.state.toppings);
   }
 
-  addTopping(topping) {
+  addTopping(key, topping) {
+    var toppings = this.state.toppings;
     var count = this.state.toppingsCount;
     if (count == 3){
       return
     }
     count += 1;
-    var toppings = this.state.toppings;
-    var currentToppingCount = toppings[topping.name] || 0;
+
+    var currentToppingCount = 0;
+    if (this.state.toppings[key])
+      currentToppingCount = toppings[key].count;
+
     currentToppingCount += 1;
-    toppings[topping.name] = currentToppingCount;
+    topping["count"] = currentToppingCount;
+    toppings[key] = topping;
+
     this.setState({
       toppings,
       toppingsCount: count
     });
   }
 
-  removeTopping(topping) {
+  removeTopping(key, topping) {
     var toppings = this.state.toppings;
-    var currentToppingCount = toppings[topping.name] || 0;
+    var currentToppingCount = 0;
+    if (this.state.toppings[key])
+      currentToppingCount = toppings[key].count;
 
     if (currentToppingCount == 0)
       return
     else if (currentToppingCount == 1)
-      delete toppings[topping.name];
+      delete toppings[key];
     else {
-      currentToppingCount -= 1;
-      toppings[topping.name] = currentToppingCount;
+      topping["count"] -= 1;
+      toppings[key] = topping;
     }
 
     var count = this.state.toppingsCount;
@@ -63,18 +71,21 @@ class Card extends Component {
       var t = this.props.card.toppings;
       var toppings = Object.keys(t).map((key, index) => {
           var topping = t[key];
+          var count = 0;
+          if (this.state.toppings[key])
+            count = this.state.toppings[key].count;
           return <div key={index}>
             <p>{topping.name}</p>
-            <p>Count: {this.state.toppings[topping.name] || 0}</p>
-            <button type="button" onClick={() => this.addTopping(topping)} className="btn btn-success btn-number" >
+            <p>Count: {count}</p>
+            <button type="button" onClick={() => this.addTopping(key, topping)} className="btn btn-success btn-number" >
                 <span className="glyphicon glyphicon-plus"></span>
             </button>
-            <button type="button" onClick={() => this.removeTopping(topping)} className="btn btn-success btn-number">
+            <button type="button" onClick={() => this.removeTopping(key, topping)} className="btn btn-success btn-number">
                 <span className="glyphicon glyphicon-minus"></span>
             </button>
           </div>
       });
-
+      console.log(this.props.productsState);
       return (
         <div className="card-deck col-md-3 my-card" >
           <div className="card text-white bg-dark">
@@ -98,7 +109,7 @@ class Card extends Component {
 }
 function mapStateToProps(state) {
   return {
-
+    productsCartState: state.cart.productsCartState
   };
 }
 function mapDispatchToProps(dispatch){
