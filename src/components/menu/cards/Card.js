@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import { addProductToCart} from '../../../actions/cart/cart_actions.js';
 import { bindActionCreators } from 'redux';
+import { addProductToCart} from '../../../actions/cart/cart_actions.js';
 
 class Card extends Component {
 
@@ -10,15 +10,22 @@ class Card extends Component {
     super(props);
     this.state = {
       toppings: {},
-      toppingsCount: 0
+      toppingsCount: 0,
+      productCount: 1
     }
-    this.addProduct.bind(this);
+    this.addProductToCart.bind(this);
     this.addTopping.bind(this);
     this.removeTopping.bind(this);
+    this.addProduct.bind(this);
+    this.removeProduct.bind(this);
   }
 
-  addProduct() {
-    this.props.addProductToCart(this.props.card, this.state.toppings);
+  addProductToCart() {
+    var product = this.props.card;
+    product["count"] = this.state.productCount;
+    console.log(product);
+    console.log(this.state.toppings);
+    // this.props.addProductToCart(product, this.state.toppings);
   }
 
   addTopping(key, topping) {
@@ -67,6 +74,16 @@ class Card extends Component {
     });
   }
 
+  addProduct() {
+    this.setState({productCount: this.state.productCount + 1})
+  }
+
+  removeProduct() {
+    if (this.state.productCount > 1) {
+      this.setState({productCount: this.state.productCount - 1})
+    }
+  }
+
   render () {
       var t = this.props.card.toppings;
       var toppings = Object.keys(t).map((key, index) => {
@@ -78,14 +95,13 @@ class Card extends Component {
             <p>{topping.name}</p>
             <p>Count: {count}</p>
             <button type="button" onClick={() => this.addTopping(key, topping)} className="btn btn-success btn-number" >
-                <span className="glyphicon glyphicon-plus"></span>
+                <span className="glyphicon glyphicon-plus">+</span>
             </button>
             <button type="button" onClick={() => this.removeTopping(key, topping)} className="btn btn-success btn-number">
-                <span className="glyphicon glyphicon-minus"></span>
+                <span className="glyphicon glyphicon-minus">-</span>
             </button>
           </div>
       });
-      console.log(this.props.productsState);
       return (
         <div className="card-deck col-md-3 my-card" >
           <div className="card text-white bg-dark">
@@ -98,7 +114,14 @@ class Card extends Component {
               <div>
                 {toppings}
               </div>
-              <a href="#" onClick={() => this.addProduct()} className="btn btn-primary btn-block">Заказать</a>
+              <p>Count: {this.state.productCount}</p>
+              <button type="button" onClick={() => this.addProduct()} className="btn btn-success btn-number" >
+                  <span className="glyphicon glyphicon-plus">+</span>
+              </button>
+              <button type="button" onClick={() => this.removeProduct()} className="btn btn-success btn-number">
+                  <span className="glyphicon glyphicon-minus">-</span>
+              </button>
+              <button  onClick={() => this.addProductToCart()} className="btn btn-primary btn-block">Заказать</button>
 
             </div>
           </div>

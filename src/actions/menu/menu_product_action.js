@@ -11,6 +11,7 @@ module.exports = {
 				snapshot.forEach(function(childSnapshot) {
 						var product = childSnapshot.val();
 						product["key"] = childSnapshot.key;
+						product["count"] = 0;
 			      products.push(product);
 			  });
 

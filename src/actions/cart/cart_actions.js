@@ -5,7 +5,6 @@ module.exports = {
 		return function(dispatch, getState) {
 			console.log(product);
 			console.log(toppings);
-		
 		}
 	}
 };
