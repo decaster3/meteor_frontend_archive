@@ -14,10 +14,6 @@ export function sendVerificationCode(phoneNumber, appVerifier){
 export function afterSendVerifeingCode(code, appVerifier){
   var user1 = firebase.auth.currentUser
   var user2 = firebase.auth().currentUser
-  console.log(1);
-  console.log(user1);
-  console.log(2);
-  console.log(user2);
   var credential = firebase.auth.PhoneAuthProvider.credential(appVerifier.confirmationResult.verificationId, code);
   // var prevUser = firebase.auth().currentUser;
   return function(dispatch){

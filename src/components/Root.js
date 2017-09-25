@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
-import configureRoutes from '../routes.js'
+import configureRoutes from '../routes'
 
 
 export default class Root extends Component {
