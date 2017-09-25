@@ -8,7 +8,7 @@ import configureRoutes from '../routes.js'
 export default class Root extends Component {
 
   render() {
-    const routes = configureRoutes()
+    const routes = configureRoutes();
     const { store, history } = this.props;
     return (
       <Provider store={store}>

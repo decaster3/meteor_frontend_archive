@@ -29,6 +29,7 @@
   "author": "Rinat Khatipov",
   "license": "Innopolis in corparated",
   "dependencies": {
+    "axios": "0.16.2",
     "firebase": "4.3.1",
     "object-assign": "4.1.0",
     "react": "15.5.4",
