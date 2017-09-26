@@ -4,6 +4,7 @@ import PhoneReducer from './auth/phone_reducer'
 import CategoryReducer from './menu/category_reducer.js'
 import ProductReducer from './menu/product_reducer.js'
 import CartReducer from './cart/cart_reducer.js'
+import ProfileReducer from './profile/profile_reducer.js'
 
 const rootReducer = combineReducers({
   user: AuthReducer,
@@ -12,7 +13,9 @@ const rootReducer = combineReducers({
   user: AuthReducer,
   categories: CategoryReducer,
   cart: CartReducer,
-  products: ProductReducer
+  products: ProductReducer,
+  profile: ProfileReducer
+
 });
 
 export default rootReducer;
