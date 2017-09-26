@@ -11,14 +11,18 @@ class ShoppingCartContainer extends Component {
 
   render(){
     let p = this.props
-    var cartElements = p.cart.products.map((product, index) =>
-      <div key = {index}>
-        <span>{product.name}</span>
-        <span>{product.quantity}</span>
-        <button onClick = {() => p.addProductToCart(product)}>+</button>
-        <button onClick = {() => p.removeProductFromCart(product)}>-</button>
-      </div>
-    );
+    var products = p.cart.products
+    var cartElements = <div>LOADING</div>
+    if (products){
+        cartElements = products.map((product, index) =>
+        <div key = {index}>
+          <span>{product.name}</span>
+          <span>{product.quantity}</span>
+          <button onClick = {() => p.addProductToCart(product)}>+</button>
+          <button onClick = {() => p.removeProductFromCart(product)}>-</button>
+        </div>
+      );
+    }
     return (
       <div>
         <span>Всего:</span><span>{p.cart.priceTotalCart}</span><br/>

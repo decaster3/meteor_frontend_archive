@@ -14,7 +14,7 @@ module.exports = function(currentstate = initialState , action){
   }
 }
 function getCartTotal(cart){
-  let count = 0
+  var count = 0
   for(let i = 0; i < cart.quantityproducts; i++){
       count += cart.products[i].price * cart.products[i].quantity
   }
