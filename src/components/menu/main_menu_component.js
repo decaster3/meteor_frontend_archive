@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {addProductToCart, createCart, removeProductFromCart} from '../../actions/cart/cart_actions'
+import Categories from './category';
+import Cards from './cards/Cards';
 
 class MainMenuComponent extends Component {
   constructor(props){
@@ -54,14 +56,12 @@ class MainMenuComponent extends Component {
   }
 
   render () {
-    let p = this.props
+
       return (
         <div>
-             <h2>{p.cart.products_quantity}</h2>
-               <button onClick = {() => p.addProductToCart(this.state.product1)} className="btn btn-primary btn-block">Заказать1</button>
-               <button onClick = {() => p.addProductToCart(this.state.product2)} className="btn btn-primary btn-block">Заказать2</button>
-               <button onClick = {() => p.removeProductFromCart(this.state.product2)} className="btn btn-primary btn-block">Удалить2</button>
-               <button onClick = {() => p.removeProductFromCart(this.state.product1)} className="btn btn-primary btn-block">Удалить1</button>
+             <h2>Меню</h2>
+             <Categories/>
+             <Cards/>
         </div>
       );
 

@@ -1,7 +1,7 @@
 let C = require("../../constants/auth/authentication.js");
 let initialState = require("./initial_state_user.js");
 
-module.exports = function(currentstate,action){
+module.exports = function(currentstate = initialState.auth,action){
   switch(action.type){
     case C.ATTEMPTING:
       return {
@@ -27,6 +27,6 @@ module.exports = function(currentstate,action){
         phoneVerified: action.phoneVerified,
         uid: action.uid
       };
-    default: return currentstate || initialState.auth;
+    default: return currentstate;
   }
 }
