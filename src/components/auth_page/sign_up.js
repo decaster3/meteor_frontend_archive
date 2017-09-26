@@ -10,6 +10,7 @@ class SignUp extends Component {
     super(props);
     this.addRef.bind(this);
     this.handleSubmit.bind(this);
+    console.log(this.props.from);
   }
 
   handleSubmit(){
@@ -50,7 +51,7 @@ SignUp.propTypes = {
 
 function mapStateToProps(state, ownParams){
     return {
-      from: ownParams.location.state.from || "/menu"
+      from: (ownParams.location.state) ? ownParams.location.state.from : "/menu"
     }
 }
 

@@ -9,8 +9,7 @@ import ProfileReducer from './profile/profile_reducer.js'
 const rootReducer = combineReducers({
   user: AuthReducer,
   phone: PhoneReducer,
-  cart: CartReducer
-  user: AuthReducer,
+  cart: CartReducer,
   categories: CategoryReducer,
   cart: CartReducer,
   products: ProductReducer,
