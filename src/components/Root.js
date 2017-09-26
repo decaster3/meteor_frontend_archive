@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import configureRoutes from '../routes'
-
-
+import { connect } from 'react-redux'
+// import { createCart } from './actions/cart/cart_actions'
+// NOTE: пофиксить инициализацию корзины при запуске
 export default class Root extends Component {
 
   render() {
