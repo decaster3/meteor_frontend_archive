@@ -10,8 +10,10 @@ module.exports = {
 			  var products = [];
 				snapshot.forEach(function(childSnapshot) {
 						var product = childSnapshot.val();
-						product["key"] = childSnapshot.key;
+						product["product_id"] = childSnapshot.key;
 						product["count"] = 0;
+						product["category"] = category;
+
 			      products.push(product);
 			  });
 
@@ -22,15 +24,7 @@ module.exports = {
 				});
 			});
     }
-  },
+  }
 
-	addProductToCart: function(product, toppings) {
-		return function(dispatch, getState) {
-			console.log(product);
-			console.log(toppings);
-			dispatch({
-				type: C.ADD_PRODUCT_TO_CART
-			});
-		}
-	}
+
 };

@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {addProductToCart, createCart, removeProductFromCart} from '../../actions/cart/cart_actions'
 import Categories from './category';
-import Cards from './cards/Cards';
+import Products from '../../containers/menu/products';
 
 class MainMenuComponent extends Component {
   constructor(props){
@@ -51,9 +51,7 @@ class MainMenuComponent extends Component {
       }
     }
   }
-  componentDidMount(){
-    this.props.createCart()
-  }
+
 
   render () {
 
@@ -61,7 +59,7 @@ class MainMenuComponent extends Component {
         <div>
              <h2>Меню</h2>
              <Categories/>
-             <Cards/>
+             <Products/>
         </div>
       );
 

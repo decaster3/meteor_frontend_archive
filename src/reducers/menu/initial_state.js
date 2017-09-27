@@ -5,8 +5,7 @@ module.exports = {
   products: {
     cards: [],
     currentCategory: "",
-    productsState: PRODUCTS.NOT_LOADED,
-    cart: []
+    productsState: PRODUCTS.NOT_LOADED
   },
   categories: {
     categoryState: CATEGORY.NOT_LOADED,

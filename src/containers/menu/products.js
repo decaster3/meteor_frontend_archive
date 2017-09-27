@@ -1,23 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import Product from './product_container';
 
 export const Products = (props) => {
+    
+    const cards = props.cards.map((card, index) => {
+        var c = Object.assign({}, card);
+        return <Product card={ c} key = {index}/>
+    });
 
-  return (
-    <Cards cards = {this.state.cards} currentCategory={this.props.currentCategory}/>
-  );
+    return (<div className ="container">
+              <div className="card-deck row justify-content-center">{cards}</div>
+            </div>)
 };
 
 Products.propTypes = {
-  cards: PropTypes.object.isRequired,
-  currentCategory: PropTypes.string.isRequired
+  cards: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    cards: state.cards,
-    currentCategory: state.currentCategory
+    cards: state.products.cards
   };
 }
 
