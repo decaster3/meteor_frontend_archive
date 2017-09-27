@@ -97,7 +97,8 @@ class Product extends Component {
     else if (currentToppingCount == 1)
       delete toppings[key];
     else {
-      topping["count"] -= 1;
+      currentToppingCount -= 1;
+      topping["count"] = currentToppingCount;
       toppings[key] = topping;
     }
 
