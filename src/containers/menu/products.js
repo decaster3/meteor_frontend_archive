@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import Product from './product_container';
 
 export const Products = (props) => {
 
-  return (
-    <Cards cards = {this.state.cards} currentCategory={this.props.currentCategory}/>
-  );
+    const cards = props.cards.map((card, index) => {
+        return <Product card = {card} key = {index}/>
+    });
+
+    return (<div >{cards}</div>);
 };
 
 Products.propTypes = {
-  cards: PropTypes.object.isRequired,
-  currentCategory: PropTypes.string.isRequired
+  cards: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    cards: state.cards,
-    currentCategory: state.currentCategory
+    cards: state.products.cards
   };
 }
 

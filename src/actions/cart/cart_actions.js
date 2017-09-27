@@ -3,15 +3,15 @@ import Cookies from 'universal-cookie';
 let C = require("../../constants/cart/cart.js")
 let cookies = new Cookies();
 
-export function addProductToCart(product){
+export function addProductToCart(product,quantity){
   var current_cart = cookies.get('cart')
   return function(dispatch){
     try {
       for(let i = 0; i < current_cart.quantityproducts; i++){
         if (product.product_id == current_cart.products[i].product_id &&
-                                      compareTopings(product.topings,current_cart.products[i].topings) &&
-                                      compareSizes(product.size_of,current_cart.products[i].size_of)){
-          current_cart.products[i].quantity += 1
+                                      comparetoppings(product.toppings,current_cart.products[i].toppings) &&
+                                      compareSizes(product.radius,current_cart.products[i].radius)){
+          current_cart.products[i].quantity += quantity || product.quantity
           // current_cart.quantityproducts +=1;
           cookies.set('cart', current_cart, {path: '/'})
           dispatch({type: C.UPDATE_CART, cart: current_cart})
@@ -22,17 +22,19 @@ export function addProductToCart(product){
       cookies.set('cart', {
         quantityproducts: current_cart.quantityproducts + 1,
         products: [...current_cart.products,{
-          quantity: 1,
+          quantity: product.quantity,
           product_id: product.product_id,
           priceTotalProduct: getTotalPriceOfProduct(product),
           name: product.name,
           img: product.img,
           description: product.description,
-          size_of: product.size_of,
+          weight: product.weight,
+          radius: product.radius,
           price: product.price,
-          topings: product.topings
+          toppings: product.toppings
         }]}
         ,{path: '/'})
+
         dispatch({type: C.UPDATE_CART, cart: cookies.get('cart')})
     }catch(err){
       console.log(err.message);
@@ -62,8 +64,8 @@ export function removeProductFromCart(product){
       if (current_cart.quantityproducts > 0){
         for(var i = 0; i < current_cart.quantityproducts; i++){
           if (product.product_id == current_cart.products[i].product_id &&
-                                        compareTopings(product.topings,current_cart.products[i].topings) &&
-                                        compareSizes(product.size_of,current_cart.products[i].size_of)){
+                                        comparetoppings(product.toppings,current_cart.products[i].toppings) &&
+                                        compareSizes(product.radius,current_cart.products[i].radius)){
             if (current_cart.products[i].quantity > 1){
               current_cart.products[i].quantity -= 1;
               cookies.set('cart', current_cart, {path: '/'});
@@ -80,6 +82,7 @@ export function removeProductFromCart(product){
           }
         }
      }else {
+
        console.log("Thre is no such products in cart");
        return;
      }
@@ -87,9 +90,10 @@ export function removeProductFromCart(product){
 }
 
 function getTotalPriceOfProduct(product){
+
   var totalProduct = product.price
-  for (var i = 0; i < product.topings.length; i++){
-    totalProduct += product.topings[i].price
+  for (var i = 0; i < product.toppings.length; i++){
+    totalProduct += product.toppings[i].price * product.toppings[i].count;
   }
   return totalProduct
 }
@@ -101,15 +105,15 @@ function compareSizes(size1,size2){
   return false
 }
 
-function compareTopings(topings1,topings2){
+function comparetoppings(toppings1,toppings2){
   var arr1 = [], arr2 = [];
 
-  for(var i = 0; i < topings1.length;i++){
-    arr1.push(topings1[i].toping_id)
+  for(var i = 0; i < toppings1.length;i++){
+    arr1.push(toppings1[i].topping_id)
   }
 
-  for(var j = 0; j < topings2.length;j++){
-    arr2.push(topings2[j].toping_id)
+  for(var j = 0; j < toppings2.length;j++){
+    arr2.push(toppings2[j].topping_id)
   }
 
   for (var i = 0; i < arr2.length; i++){

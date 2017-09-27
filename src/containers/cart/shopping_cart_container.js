@@ -18,7 +18,7 @@ class ShoppingCartContainer extends Component {
         <div key = {index}>
           <span>{product.name}</span>
           <span>{product.quantity}</span>
-          <button onClick = {() => p.addProductToCart(product)}>+</button>
+          <button onClick = {() => p.addProductToCart(product,1)}>+</button>
           <button onClick = {() => p.removeProductFromCart(product)}>-</button>
         </div>
       );
