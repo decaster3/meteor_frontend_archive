@@ -13,10 +13,11 @@ export function addProductToCart(product,quantity){
                                       compareSizes(product.radius,current_cart.products[i].radius)){
           current_cart.products[i].quantity += quantity || product.quantity
           // current_cart.quantityproducts +=1;
-          cookies.set('cart', current_cart, {path: '/'})
+          cookies.set('cart', current_cart, {path: '/', maxAge: 6*60*60})
           dispatch({type: C.UPDATE_CART, cart: current_cart})
           return
         }
+
       }
 
       cookies.set('cart', {
@@ -33,7 +34,7 @@ export function addProductToCart(product,quantity){
           price: product.price,
           toppings: product.toppings
         }]}
-        ,{path: '/'})
+        ,{path: '/', maxAge: 6*60*60})
 
         dispatch({type: C.UPDATE_CART, cart: cookies.get('cart')})
     }catch(err){
