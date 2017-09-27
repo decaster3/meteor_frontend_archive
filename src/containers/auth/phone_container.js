@@ -33,7 +33,6 @@ class PhoneContainer extends Component {
   render(){
     let p = this.props
     let phone = p.phone
-    console.log(phone);
     switch(phone.currently) {
         case P.PHONE_EXIST: return (
           <div><div id="invisible-recaptcha"></div>

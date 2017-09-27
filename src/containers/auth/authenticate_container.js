@@ -15,6 +15,8 @@ class AuthContainer extends Component {
       passSignup: '',
       emailSignin: '',
       passSignin: '',
+      nameSignup: '',
+      lastNameSignup: ''
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -28,8 +30,8 @@ class AuthContainer extends Component {
 
   render(){
 		let p = this.props
-    let auth = p.user;
-
+    let auth = p.user
+    let s = this.state
 		switch(auth.currently){
 			case C.SIGNED_IN: return (
 				<div className="authpanel">
@@ -61,24 +63,32 @@ class AuthContainer extends Component {
               PASSWORD SIGNUP<br />
               <label>
                 Email:
-                <input name="emailSignup" type = "text" defaultValue = {this.state.emailSignup} onChange = {this.handleChange}/>
+                <input name="emailSignup" type = "text" defaultValue = {s.emailSignup} onChange = {this.handleChange}/>
               </label>
               <label>
                 Passwprd:
-                <input name = "passSignup" type = "password" defaultValue = {this.state.passSignup} onChange = {this.handleChange}/>
+                <input name = "passSignup" type = "password" defaultValue = {s.passSignup} onChange = {this.handleChange}/>
               </label>
-              <button onClick = {() => p.passwordSignup(this.state.emailSignup, this.state.passSignup)}>SIGN UP</button>
+              <label>
+                Name:
+                <input name = "nameSignup" type = "nameSignup" defaultValue = {s.nameSignup} onChange = {this.handleChange}/>
+              </label>
+              <label>
+                Last name:
+                <input name = "lastNameSignup" type = "lastNameSignup" defaultValue = {s.lastNameSignup} onChange = {this.handleChange}/>
+              </label>
+              <button onClick = {() => p.passwordSignup(s.emailSignup,s.nameSignup,s.lastNameSignup, s.passSignup)}>SIGN UP</button>
 
               <br />PASSWORD SIGNIN<br />
               <label>
                 Email:
-                <input name="emailSignin" type = "text" defaultValue = {this.state.emailSignin} onChange = {this.handleChange}/>
+                <input name="emailSignin" type = "text" defaultValue = {s.emailSignin} onChange = {this.handleChange}/>
               </label>
               <label>
                 Passwprd:
-                <input name = "passSignin" type = "password" defaultValue = {this.state.passSignin} onChange = {this.handleChange}/>
+                <input name = "passSignin" type = "password" defaultValue = {s.passSignin} onChange = {this.handleChange}/>
               </label>
-              <button onClick = {() => p.passwordSignin(this.state.emailSignin, this.state.passSignin)}>SIGN IN</button>
+              <button onClick = {() => p.passwordSignin(s.emailSignin, s.passSignin)}>SIGN IN</button>
         </div>
 			);
 		}

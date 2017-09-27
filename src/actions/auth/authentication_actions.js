@@ -6,19 +6,22 @@ let C = require("../../constants/auth/authentication.js")
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
 				if (user){
-					console.log(user);
 					var isPhoneVerify = false
 					if (user.phoneNumber != null){
 						isPhoneVerify = true
 					}
-					console.log(user);
-					dispatch({
-						type: C.SIGNIN_USER,
-						uid: user.uid,
-						username: user.email,
-						phoneVerified: isPhoneVerify,
-						emailVerified: user.emailVerified
-					});
+					//подгрузка данных из базы данных профиля пользователя
+					let authRef = firebase.database().ref().child('users').child(user.uid)
+					authRef.on('value', function(snapshot){
+						dispatch({
+							type: C.SIGNIN_USER,
+							uid: user.uid,
+							email: snapshot.val().email,
+							phoneVerified: isPhoneVerify,
+							emailVerified: user.emailVerified,
+							username: snapshot.val().username
+						});
+					})
 				} else {
 					if (getState().user.currently !== C.ANONYMOUS){ // иногда выбрасывал что залогинен, хотя не был, хз почему, это костыль
 						dispatch({type:C.LOGOUT});
@@ -30,16 +33,28 @@ let C = require("../../constants/auth/authentication.js")
 
 	export function facebookSignin(){
     let provider = new firebase.auth.FacebookAuthProvider();
+		let authRef = firebase.database().ref().child('users')
 		return function(dispatch){
 			dispatch({type:C.ATTEMPTING})
       firebase.auth().signInWithPopup(provider).then(function(result) {
       }).then(() => {
 				var user = firebase.auth().currentUser
-				firebase.auth().onAuthStateChanged(function(user) {
-					if(!user.emailVerified){
-						user.sendEmailVerification();
-					}
-				})
+				//добавление информации в профиль пользователя в бд
+				authRef.once('value')
+					.then(function(snapshot){
+						if (!snapshot.hasChild(user.uid)){
+							//отправление верификации почты, только в первый раз, нужно протестировать
+							firebase.auth().onAuthStateChanged(function(user) {
+								if(!user.emailVerified){
+									user.sendEmailVerification();
+								}
+							})
+							authRef.child(user.uid).set({
+								username: user.displayName,
+								email: user.email
+							})
+						}
+					})
 			}).catch(function(error) {
         console.log(error)
         dispatch({type:C.LOGOUT})
@@ -52,18 +67,29 @@ let C = require("../../constants/auth/authentication.js")
 
 	export function emailVerify(){
 		var user = firebase.auth().currentUser
-		return function(dispatch){
-			firebase.auth().onAuthStateChanged(function(user) {
+		firebase.auth().onAuthStateChanged(function(user) {
 				user.sendEmailVerification();
-			})
-		}
+		})
 	}
 
 	export function googleSignin(){
+		let authRef = firebase.database().ref().child('users')
 		let provider = new firebase.auth.GoogleAuthProvider();
 		return function(dispatch){
 			dispatch({type:C.ATTEMPTING})
 			firebase.auth().signInWithPopup(provider).then(function(result) {
+			}).then( () => {
+				//зфапись в бд если его там не было
+				var user = firebase.auth().currentUser
+				authRef.once('value')
+					.then(function(snapshot){
+						if (!snapshot.hasChild(user.uid)){
+							authRef.child(user.uid).set({
+								username: user.displayName,
+								email: user.email
+							})
+						}
+					})
 			}).catch(function(error) {
 				console.log(error)
 				dispatch({type:C.LOGOUT})
@@ -78,16 +104,28 @@ let C = require("../../constants/auth/authentication.js")
 		}
 	}
 
-	export function passwordSignup(email,pass){
+	export function passwordSignup(email,name,lastName,pass){
+		let authRef = firebase.database().ref().child('users')
 		return function(dispatch){
 			dispatch({type:C.ATTEMPTING})
-				firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error) {
+				firebase.auth().createUserWithEmailAndPassword(email, pass).then(() => {
+					//отправление письма и запись в бд при регистрации
+					var user = firebase.auth().currentUser
+					firebase.auth().onAuthStateChanged(function(user) {
+						user.sendEmailVerification()
+					})
+					authRef.once('value')
+						.then(function(snapshot){
+							if (!snapshot.hasChild(user.uid)){
+								authRef.child(user.uid).set({
+									username: name + " " + lastName,
+									email: user.email
+								})
+							}
+						})
+				}).catch(function(error) {
 					dispatch({type:C.LOGOUT})
 				});
-				var user = firebase.auth().currentUser
-				firebase.auth().onAuthStateChanged(function(user) {
-					user.sendEmailVerification()
-				})
 		}
 	}
 
