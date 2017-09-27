@@ -22,6 +22,7 @@ module.exports = function(currentstate,action){
     case C.SIGNIN_USER:
       return {
         currently: C.SIGNED_IN,
+        email: action.email,
         username: action.username,
         emailVerified: action.emailVerified,
         phoneVerified: action.phoneVerified,

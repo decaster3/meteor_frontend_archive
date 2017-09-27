@@ -6,18 +6,22 @@ let C = require("../../constants/auth/authentication.js")
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
 				if (user){
-					console.log(user);
 					var isPhoneVerify = false
 					if (user.phoneNumber != null){
 						isPhoneVerify = true
 					}
-					dispatch({
-						type: C.SIGNIN_USER,
-						uid: user.uid,
-						username: user.email,
-						phoneVerified: isPhoneVerify,
-						emailVerified: user.emailVerified
-					});
+					//подгрузка данных из базы данных профиля пользователя
+					let authRef = firebase.database().ref().child('users').child(user.uid)
+					authRef.on('value', function(snapshot){
+						dispatch({
+							type: C.SIGNIN_USER,
+							uid: user.uid,
+							email: snapshot.val().email,
+							phoneVerified: isPhoneVerify,
+							emailVerified: user.emailVerified,
+							username: snapshot.val().username
+						});
+					})
 				} else {
 					if (getState().user.currently !== C.ANONYMOUS){ // иногда выбрасывал что залогинен, хотя не был, хз почему, это костыль
 						dispatch({type:C.LOGOUT});
@@ -63,11 +67,9 @@ let C = require("../../constants/auth/authentication.js")
 
 	export function emailVerify(){
 		var user = firebase.auth().currentUser
-		return function(dispatch){
-			firebase.auth().onAuthStateChanged(function(user) {
+		firebase.auth().onAuthStateChanged(function(user) {
 				user.sendEmailVerification();
-			})
-		}
+		})
 	}
 
 	export function googleSignin(){
@@ -103,11 +105,11 @@ let C = require("../../constants/auth/authentication.js")
 	}
 
 	export function passwordSignup(email,name,lastName,pass){
-		console.log(name + lastName);
 		let authRef = firebase.database().ref().child('users')
 		return function(dispatch){
 			dispatch({type:C.ATTEMPTING})
 				firebase.auth().createUserWithEmailAndPassword(email, pass).then(() => {
+					//отправление письма и запись в бд при регистрации
 					var user = firebase.auth().currentUser
 					firebase.auth().onAuthStateChanged(function(user) {
 						user.sendEmailVerification()
