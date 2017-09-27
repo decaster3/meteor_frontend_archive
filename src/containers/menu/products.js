@@ -4,15 +4,12 @@ import {connect} from 'react-redux';
 import Product from './product_container';
 
 export const Products = (props) => {
-    
+
     const cards = props.cards.map((card, index) => {
-        var c = Object.assign({}, card);
-        return <Product card={ c} key = {index}/>
+        return <Product card = {card} key = {index}/>
     });
 
-    return (<div className ="container">
-              <div className="card-deck row justify-content-center">{cards}</div>
-            </div>)
+    return (<div >{cards}</div>);
 };
 
 Products.propTypes = {
