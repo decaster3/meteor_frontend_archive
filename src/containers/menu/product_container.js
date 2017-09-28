@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addProductToCart, createCart} from '../../actions/cart/cart_actions.js';
-import AdditionInfo from '../../components/menu/cards/product_add_info.js';
+import Sizes from '../../components/menu/cards/product_sizes.js';
 import Toppings from '../../components/menu/cards/toppings.js';
 import Card from '../../components/menu/cards/card.js';
 
@@ -46,7 +46,7 @@ class Product extends Component {
   }
 
   addProductToCart(self) {
-    var product = Object.assign({}, self.props.card);
+    var product = Object.assign({}, self.props.product);
     product["quantity"] = self.state.productCount;
 
     var toppings = Object.keys(self.state.toppings).map((key, index) => {
@@ -128,10 +128,11 @@ class Product extends Component {
   }
 
   render () {
+    var product = this.props.product;
     var price = this.calculatePrice();
-    var toppings = (<Toppings toppings={this.props.card.toppings} addTopping={this.addTopping} removeTopping={this.removeTopping} parent={this}/>);
-    var add_info = (<AdditionInfo foo={this.trackChanges} parent={this} sizes={this.props.card.sizes}/>);
-    return (<Card card={this.props.card} toppings = {toppings} add_info={add_info} addProductToCart={this.addProductToCart} addProduct={this.addProduct} removeProduct={this.removeProduct} parent={this} price={price}/> );
+    var toppings = product.toppings ? (<Toppings toppings={product.toppings} addTopping={this.addTopping} removeTopping={this.removeTopping} parent={this}/>) : null;
+    var add_info =  product.sizes ? (<Sizes foo={this.trackChanges} parent={this} sizes={product.sizes}/>) : null;
+    return (<Card product={product} toppings = {toppings} add_info={add_info} addProductToCart={this.addProductToCart} addProduct={this.addProduct} removeProduct={this.removeProduct} parent={this} price={price}/> );
   }
 }
 

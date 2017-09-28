@@ -10,15 +10,14 @@ class Card extends Component {
 
       return (
         <div >
-          <img src={this.props.card.img}/>
+          <img src={this.props.product.img}/>
           <div >
 
-            <h4 >{this.props.card.name}</h4>
-            <h6 >{this.props.card.description}</h6>
+            <h4 >{this.props.product.name}</h4>
+            <h6 >{this.props.product.description}</h6>
 
             {this.props.toppings}
             {this.props.add_info}
-
 
             <p>Количество: {this.props.parent.state.productCount}</p>
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class AdditionInfo extends Component {
+class Sizes extends Component {
 
   constructor(props){
     super(props);
@@ -45,4 +45,4 @@ class AdditionInfo extends Component {
   }
 }
 
-export default (AdditionInfo)
+export default (Sizes)

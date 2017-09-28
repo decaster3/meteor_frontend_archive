@@ -24,8 +24,8 @@ class Categories extends Component {
 
     switch (categoryState) {
       case C.LOADED:
-        categories = this.props.categories.map(function(key, index) {
-          return <img onClick={() => f(key)} className="rounded-circle" id={key} key={index} src="http://2.bp.blogspot.com/-C6KY8tsc8Fw/T-SVFnncxjI/AAAAAAAAANw/FMiNzA8Zecw/s640/mr.bean.jpg" width="100" height="100" />
+        categories = this.props.categories.map((key, index) => {
+          return <img onClick={() => f(key)} id={key} key={index} src="http://2.bp.blogspot.com/-C6KY8tsc8Fw/T-SVFnncxjI/AAAAAAAAANw/FMiNzA8Zecw/s640/mr.bean.jpg" width="100" height="100" />
         });
         break;
       case C.LOADING:
@@ -36,7 +36,7 @@ class Categories extends Component {
     }
 
     return(
-      <div className="categories d-flex justify-content-center vertical-center">
+      <div >
         {categories}
       </div>)
   }

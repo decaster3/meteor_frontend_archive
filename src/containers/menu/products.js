@@ -5,21 +5,29 @@ import Product from './product_container';
 
 export const Products = (props) => {
 
-    const cards = props.cards.map((card, index) => {
-        return <Product card = {card} key = {index}/>
+    const products = props.products.map((product, index) => {
+        return <Product product = {product} key = {index}/>
     });
 
-    return (<div >{cards}</div>);
+    return (<div >{products}</div>);
 };
 
 Products.propTypes = {
-  cards: PropTypes.array.isRequired
+  products: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    cards: state.products.cards
+    products: state.products.products
   };
+}
+
+function mapDispatchToProps(dispatch){
+  return bindActionCreators(
+    {
+    },
+    dispatch
+  )
 }
 
 export default connect(

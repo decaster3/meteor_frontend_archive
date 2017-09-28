@@ -6,20 +6,36 @@ module.exports = function(currentstate = initialState.products, action) {
     case C.LOAD_PRODUCTS:
       return {
         productsState: C.LOADED,
-        cards: action.cards,
-        currentCategory: action.currentCategory,
-        cart: []
+        products: action.products,
+        all_products: action.all_products,
+        sub_categories: action.sub_categories
       };
     case C.LOADING_PRODUCTS:
       return {
         productsState: C.LOADING,
-        cards: [],
+        products: [],
         currentCategory: ""
       };
-    case C.ADD_PRODUCT_TO_CART:
+    case C.SWITCH_PRODUCT:
       return {
-        productsState: C.ADDED_TO_CART
+        productsState: C.LOADED,
+        currentCategory: action.currentCategory,
+        all_products: currentstate.all_products,
+        sub_categories: currentstate.sub_categories,
+        products: filterProducts(currentstate, action.currentCategory)
       };
+
     default: return currentstate;
   }
+}
+
+function filterProducts(currentstate, currentCategory) {
+  var categories = currentstate.sub_categories;
+  var products = currentstate.all_products;
+  var currentProducts = [];
+  if (currentCategory === "Все")
+    return products;
+
+  currentProducts = products.filter((product) => {return product.sub_category == currentCategory});
+  return currentProducts;
 }

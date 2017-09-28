@@ -3,9 +3,11 @@ var CATEGORY = require("../../constants/menu/category.js");
 
 module.exports = {
   products: {
-    cards: [],
-    currentCategory: "",
-    productsState: PRODUCTS.NOT_LOADED
+    products: [],
+    all_products: [],
+    productsState: PRODUCTS.NOT_LOADED,
+    sub_categories: [],
+    currentCategory: ""
   },
   categories: {
     categoryState: CATEGORY.NOT_LOADED,
