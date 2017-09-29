@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { passwordSignin, passwordSignup, googleSignin, facebookSignin, logoutUser } from '../../actions/auth/authentication_actions';
-import PhoneContainer from './phone_container'
+import PhoneVerificationContainer from './phone_verification_container'
 import { bindActionCreators } from 'redux';
 import * as firebase from 'firebase';
 
@@ -39,7 +39,7 @@ class AuthContainer extends Component {
 					<span>Logged in as {auth.username}.</span>
           <span>Email {String(auth.emailVerified)}</span>
           <span> Phone {String(auth.phoneVerified)}</span>
-          <PhoneContainer />
+          <PhoneVerificationContainer />
           {' '}<button onClick={p.logoutUser}>Log out</button>
 				</div>
 			);

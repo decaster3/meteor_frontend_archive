@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 
 let P = require("../../constants/auth/phone.js")
 
-class PhoneContainer extends Component {
+class PhoneVerificationContainer extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -78,4 +78,4 @@ function mapDispatchToProps(dispatch){
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PhoneContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(PhoneVerificationContainer)

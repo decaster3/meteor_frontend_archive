@@ -11,6 +11,11 @@ module.exports = function(currentstate = initialState.profile_settings, action){
       return {
         profile_settings_category: action.category
       };
+    case C.FIELD_CHANGING:
+      return {
+        profile_settings_category: currentstate.profile_settings_category,
+        changing: action.changing
+      };
     default:
       return currentstate;
   }
