@@ -8,6 +8,7 @@ class MainStartPage extends Component {
              <Link to='/menu'>Меню</Link>
              <Link to='/authentication'>Аутентификация</Link>
              <Link to='/cart'>Корзина</Link>
+             <Link to='/profile'>Профиль</Link>
         </div>
       )
   }

@@ -1,9 +1,7 @@
-var C = require("../../constants/profile/profile.js");
+var C = require("../../constants/profile/profile");
 
 module.exports = {
-  profile: {
-    userStatus: C.NOT_LOADED,
-    link: "",
-    user: {}
+  profile_settings: {
+    profile_settings_category: C.INITIALS_SELECTED
   }
 }

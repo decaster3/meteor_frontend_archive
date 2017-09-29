@@ -6,6 +6,11 @@ let C = require("../../constants/auth/authentication.js")
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
 				if (user){
+					var userInfoForProviders= user.providerData
+					var authProviders = []
+					for (var i = 0; i < userInfoForProviders.length; i++){
+						authProviders.push(userInfoForProviders[i].providerId)
+					}
 					var isPhoneVerify = false
 					if (user.phoneNumber != null){
 						isPhoneVerify = true
@@ -16,6 +21,7 @@ let C = require("../../constants/auth/authentication.js")
 						dispatch({
 							type: C.SIGNIN_USER,
 							uid: user.uid,
+							authProviders: authProviders,
 							email: snapshot.val().email,
 							phoneVerified: isPhoneVerify,
 							emailVerified: user.emailVerified,
@@ -138,4 +144,59 @@ let C = require("../../constants/auth/authentication.js")
         // An error happened.
       });
 		}
+	}
+
+	export function changeName(){
+
+	}
+
+	export function changeLocation(){
+
+	}
+
+	export function rememberPassword(){
+
+	}
+
+	export function changeEmail(){
+
+	}
+
+	export function addPassword(){
+
+	}
+
+	export function changePassword(){
+
+	}
+
+	export function resendEmailVerification(){
+
+	}
+
+	export function addFacebook(){
+
+	}
+
+	export function changeFacebook(){
+
+	}
+	export function deleteFacebook(){
+
+	}
+
+	export function addGmail(){
+
+	}
+
+	export function changeGmail(){
+
+	}
+
+	export function deleteGmail(){
+
+	}
+
+	export function addAddress(){
+
 	}

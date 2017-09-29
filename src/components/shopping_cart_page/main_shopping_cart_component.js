@@ -5,7 +5,7 @@ export default class MainShoppingCartComponent extends Component {
   render(){
     return (
       <div>
-        <ShoppingCartContainer />
+        HEY
       </div>
     )
 	}
