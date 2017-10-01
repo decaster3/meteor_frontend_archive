@@ -5,6 +5,7 @@ let C = require("../../constants/auth/authentication.js")
 	export function startListeningToAuth(){
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
+				console.log(1);
 				if (user){
 					var userInfoForProviders= user.providerData
 					var authProviders = []
@@ -21,8 +22,12 @@ let C = require("../../constants/auth/authentication.js")
 						dispatch({
 							type: C.SIGNIN_USER,
 							uid: user.uid,
+							default_country: snapshot.val().default_country || 'almaty',
+							default_city: snapshot.val().default_city || 'almaty',
 							authProviders: authProviders,
 							email: snapshot.val().email,
+							phone: user.phoneNumber,
+							addresses: snapshot.val().addresses,
 							phoneVerified: isPhoneVerify,
 							emailVerified: user.emailVerified,
 							username: snapshot.val().username

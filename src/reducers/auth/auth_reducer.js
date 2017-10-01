@@ -23,7 +23,11 @@ module.exports = function(currentstate = initialState.auth,action){
       return {
         currently: C.SIGNED_IN,
         email: action.email,
+        phone: action.phone,
+        default_country: action.default_country,
+        default_city: action.default_city,
         username: action.username,
+        addresses: action.addresses,
         authProviders: action.authProviders,
         emailVerified: action.emailVerified,
         phoneVerified: action.phoneVerified,

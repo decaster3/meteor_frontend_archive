@@ -26,28 +26,33 @@ class UserNamePhotoContainer extends Component {
     let p = this.props
     let s = this.state
     let user = p.user
-    switch (p.profile_settings.changing) {
-      case C.CHANGING_USERNAME_AVATAR:
-        return (
-        <div>
-          <label>
-            Name:
-            <input name = "name" type = "name" defaultValue = {s.name} onChange = {this.handleChange}/>
-          </label>
-          <label>
-            Last name:
-            <input name = "lastName" type = "lastName" defaultValue = {s.lastName} onChange = {this.handleChange}/>
-          </label>
-          <button onClick = {() => {p.changeName(s.name,s.lastName)}}>Save</button>
-          <button onClick = {p.exitEditMode}>Cancel</button>
-        </div>)
-      default:
-        return(
+    if (user.currently != "ANONYMOUS"){
+      switch (p.profile_settings.changing) {
+        case C.CHANGING_USERNAME_AVATAR:
+          return (
           <div>
-            {user.username}
-            <button onClick = {p.editMode}>Change initials</button>
-          </div>
-        )
+            <label>
+              Name:
+              <input name = "name" type = "name" defaultValue = {s.name} onChange = {this.handleChange}/>
+            </label>
+            <label>
+              Last name:
+              <input name = "lastName" type = "lastName" defaultValue = {s.lastName} onChange = {this.handleChange}/>
+            </label>
+            <button onClick = {() => {p.changeName(s.name,s.lastName)}}>Save</button>
+            <button onClick = {p.exitEditMode}>Cancel</button>
+          </div>)
+        default:
+          return(
+            <div>
+              {user.username}
+              <button onClick = {p.editMode}>Change initials</button>
+            </div>
+          )
+      }
+    }
+    else {
+      return( <div>Loading</div>)
     }
   }
 }

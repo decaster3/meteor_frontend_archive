@@ -10,23 +10,29 @@ class PhoneContainer extends Component {
   render(){
     let p = this.props
     let phone = p.phone
-    switch (phone.phone.currently) {
-      case "PHONE_EXIST":
-        return (
-          <div>
-            {user.phone}
-          </div>
-        )
-      case "PHONE_NOT_EXIST":
-        return(<PhoneVerificationContainer />)
-      default:
-        return(<div>Loading</div>)
+    let user = p.user
+    if (user.currently != "ANONYMOUS"){
+      switch (user.phoneVerified) {
+        case true:
+          return (
+            <div>
+              {user.phone}
+            </div>
+          )
+        case false:
+          return(<PhoneVerificationContainer />)
+        default:
+          return(<div>Loading</div>)
+      }}
+    else {
+      return(<div>Loading</div>)
     }
   }
 }
 
 function mapStateToProps(state){
   return{
+    user: state.user,
     phone: state.phone
   }
 }
