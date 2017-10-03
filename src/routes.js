@@ -19,7 +19,7 @@ const configureRoutes = () => {
           <Route path="/sign_in" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignIn/>))}/>
           <Route path="/sign_up" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignUp/>))}/>
           <Route path="/profile" render={() => (
-              loggedIn ? (
+              !loggedIn ? (
                 <Redirect to={{
                     pathname: '/sign_up',
                     state: {
