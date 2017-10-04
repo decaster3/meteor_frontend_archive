@@ -5,31 +5,24 @@ let C = require("../../constants/auth/authentication.js")
 	export function startListeningToAuth(){
 		return function(dispatch,getState){
 			firebase.auth().onAuthStateChanged(function(user) {
-				console.log(1);
 				if (user){
-					var userInfoForProviders= user.providerData
-					var authProviders = []
-					for (var i = 0; i < userInfoForProviders.length; i++){
-						authProviders.push(userInfoForProviders[i].providerId)
-					}
-					var isPhoneVerify = false
-					if (user.phoneNumber != null){
-						isPhoneVerify = true
-					}
-					//подгрузка данных из базы данных профиля пользователя
 					let authRef = firebase.database().ref().child('users').child(user.uid)
+					//подгрузка данных из базы данных профиля пользователя
+					authRef.update({
+						emailVerified: user.emailVerified
+					})
+
 					authRef.on('value', function(snapshot){
 						dispatch({
 							type: C.SIGNIN_USER,
-							uid: user.uid,
 							default_country: snapshot.val().default_country || 'almaty',
 							default_city: snapshot.val().default_city || 'almaty',
-							authProviders: authProviders,
+							authProviders: snapshot.val().authProviders,
 							email: snapshot.val().email,
-							phone: user.phoneNumber,
+							phone: snapshot.val().phoneNumber,
 							addresses: snapshot.val().addresses,
-							phoneVerified: isPhoneVerify,
-							emailVerified: user.emailVerified,
+							phoneVerified: snapshot.val().phoneVerified,
+							emailVerified: snapshot.val().emailVerified,
 							username: snapshot.val().username
 						});
 					})
@@ -53,19 +46,35 @@ let C = require("../../constants/auth/authentication.js")
 				//добавление информации в профиль пользователя в бд
 				authRef.once('value')
 					.then(function(snapshot){
-						if (!snapshot.hasChild(user.uid)){
-							//отправление верификации почты, только в первый раз, нужно протестировать
-							firebase.auth().onAuthStateChanged(function(user) {
-								if(!user.emailVerified){
-									user.sendEmailVerification();
-								}
-							})
-							authRef.child(user.uid).set({
+							authRef.child(user.uid).update({
 								username: user.displayName,
 								email: user.email
 							})
-						}
+							//отправление верификации почты, только в первый раз, нужно протестировать
+							firebase.auth().onAuthStateChanged(function(user) {
+								if(!user.emailVerified){
+									user.sendEmailVerification().then(function() {
+									  console.log("email sent");
+									}).catch(function(error) {
+									  console.log(error.message);
+									});
+								}
+							})
 					})
+			})
+			.then(() => {
+				var user = firebase.auth().currentUser
+				var isPhoneVerify = false
+				if (user.phoneNumber != null){
+					isPhoneVerify = true
+				}
+				let authRef = firebase.database().ref().child('users').child(user.uid)
+				authRef.update({
+					emailVerified: user.emailVerified,
+					phoneVerified: isPhoneVerify,
+					authProviders: user.providerData,
+					phoneNumber: user.phoneNumber || ''
+				})
 			}).catch(function(error) {
         console.log(error)
         dispatch({type:C.LOGOUT})
@@ -89,29 +98,46 @@ let C = require("../../constants/auth/authentication.js")
 		return function(dispatch){
 			dispatch({type:C.ATTEMPTING})
 			firebase.auth().signInWithPopup(provider).then(function(result) {
-			}).then( () => {
-				//зфапись в бд если его там не было
+			}).then(() => {
 				var user = firebase.auth().currentUser
+				//добавление информации в профиль пользователя в бд
 				authRef.once('value')
 					.then(function(snapshot){
-						if (!snapshot.hasChild(user.uid)){
-							authRef.child(user.uid).set({
+							authRef.child(user.uid).update({
 								username: user.displayName,
 								email: user.email
 							})
-						}
 					})
-			}).catch(function(error) {
+			})
+			.then(() => {
+				var user = firebase.auth().currentUser
+				var isPhoneVerify = false
+				if (user.phoneNumber != null){
+					isPhoneVerify = true
+				}
+				let authRef = firebase.database().ref().child('users').child(user.uid)
+				authRef.update({
+					emailVerified: user.emailVerified,
+					phoneVerified: isPhoneVerify,
+					authProviders: user.providerData,
+					phoneNumber: user.phoneNumber || ''
+				}).catch(function(error) {
 				console.log(error)
 				dispatch({type:C.LOGOUT})
 				})
-		}
+		})
 	}
+}
 
 	export function passwordSignin(email,pass){
 		return function(dispatch){
 			dispatch({type:C.ATTEMPTING})
-			firebase.auth().signInWithEmailAndPassword(email, pass)
+			firebase.auth().signInWithEmailAndPassword(email, pass).catch(function(error) {
+			  // Handle Errors here.
+			  var errorCode = error.code;
+			  var errorMessage = error.message;
+			  console.log(errorMessage);
+			});
 		}
 	}
 
@@ -127,14 +153,28 @@ let C = require("../../constants/auth/authentication.js")
 					})
 					authRef.once('value')
 						.then(function(snapshot){
-							if (!snapshot.hasChild(user.uid)){
-								authRef.child(user.uid).set({
+								authRef.child(user.uid).update({
 									username: name + " " + lastName,
 									email: user.email
 								})
-							}
 						})
-				}).catch(function(error) {
+				}).then(() => {
+								var user = firebase.auth().currentUser
+								var isPhoneVerify = false
+								if (user.phoneNumber != null){
+									isPhoneVerify = true
+								}
+								let authRef = firebase.database().ref().child('users').child(user.uid)
+								authRef.update({
+									emailVerified: user.emailVerified,
+									phoneVerified: isPhoneVerify,
+									authProviders: user.providerData,
+									phoneNumber: user.phoneNumber || ''
+								}).catch(function(error) {
+								console.log(error)
+								dispatch({type:C.LOGOUT})
+								})
+						}).catch(function(error) {
 					dispatch({type:C.LOGOUT})
 				});
 		}

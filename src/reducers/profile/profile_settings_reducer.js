@@ -5,11 +5,13 @@ module.exports = function(currentstate = initialState.profile_settings, action){
   switch(action.type){
     case C.LOADING:
     return {
-      profile_settings_category: C.LOADING_CATEGORY
+      profile_settings_category: C.LOADING_CATEGORY,
+      changing: currentstate.changing
     };
     case C.SETTINGS_CATEGORY_SELECTED:
       return {
-        profile_settings_category: action.category
+        profile_settings_category: action.category,
+        changing: currentstate.changing
       };
     case C.FIELD_CHANGING:
       return {

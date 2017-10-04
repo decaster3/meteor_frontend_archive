@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import { changeEmail, verifyEmail } from '../../../actions/profile/profile_settings_action'
-
+import ReauthenticationContainerForChangingEmail from './reauthentication_container_for_changing_email.js'
 
 class EmailContainer extends Component {
   constructor(props){
     super(props);
     this.state = {
-      email:''
+      newEmail:''
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -26,15 +26,22 @@ class EmailContainer extends Component {
     let s = this.state
     let user = p.user
     switch (p.profile_settings.changing) {
+      case C.LOADING_REAUTHENTICATION:
+      // кейс когда пользователь пытается реаутифицироваться с фейса или гугла
+        return(<div>Подтвердите свой аккаунт, чтобы заменить почту</div>)
+      case C.REAUTHENTICATE_USER_FOR_CHANGE_EMAIL:
+      // кейс когда пользователю предложено ввести пароль или фейс, чтобы сменять почту
+        return(<ReauthenticationContainerForChangingEmail newEmail = {s.newEmail} />)
       case C.CHANGING_EMAIL:
+      //после нажатию на кнопку сменить почту
         return(
           <div>
             <label>
-              email:
-              <input name = "email" type = "email" defaultValue = {s.email} onChange = {this.handleChange}/>
+              newEmail:
+              <input name = "newEmail" type = "newEmail" defaultValue = {s.newEmail} onChange = {this.handleChange}/>
             </label>
-            <button onClick = {() => {p.changeEmail(s.email)}}>Save</button>
-            <button onClick = {p.exitEditMode}>Cancel</button>
+            <button onClick = {() => p.changeEmail(s.newEmail)}>Save</button>
+            <button onClick = {() => p.exitEditMode()}>Cancel</button>
           </div>
         )
       default:
@@ -43,7 +50,7 @@ class EmailContainer extends Component {
           return(
             <div>
               {p.user.email}
-              <button onClick = {p.editMode}>Change</button>
+              <button onClick = {() => p.editMode()}>Change</button>
             </div>
           )
           default:
@@ -51,8 +58,8 @@ class EmailContainer extends Component {
             <div>
               Ваш мэйл не верефицирован
               {user.email}
-              <button onClick = {() => {p.verifyEmail}}>Verify</button>
-              <button onClick = {p.editMode}>Change email</button>
+              <button onClick = {() => p.verifyEmail()}>Verify</button>
+              <button onClick = {() => p.editMode()}>Change email</button>
             </div>
           )
         }

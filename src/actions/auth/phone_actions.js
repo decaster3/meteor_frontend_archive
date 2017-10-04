@@ -12,13 +12,16 @@ export function sendVerificationCode(phoneNumber, appVerifier){
 }
 
 export function afterSendVerifeingCode(code, appVerifier){
-  var user1 = firebase.auth.currentUser
-  var user2 = firebase.auth().currentUser
   var credential = firebase.auth.PhoneAuthProvider.credential(appVerifier.confirmationResult.verificationId, code);
-  // var prevUser = firebase.auth().currentUser;
   return function(dispatch){
     firebase.auth().currentUser.linkWithCredential(credential).then(function(user) {
-      dispatch({type: C.VERIFIED, phoneNumber: firebase.auth.currentUser.phoneNumber})
+      let authRef = firebase.database().ref().child('users').child(user.uid)
+      authRef.update({
+        phoneVerified: true,
+        authProviders: user.providerData,
+        phoneNumber: user.phoneNumber
+      })
+      dispatch({type: C.VERIFIED, phoneNumber: user.phoneNumber})
       console.log("Account linking success", user);
     }, function(error) {
       console.log("Account linking error", error);

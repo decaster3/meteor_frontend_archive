@@ -30,15 +30,15 @@ class AuthContainer extends Component {
 
   render(){
 		let p = this.props
-    let auth = p.user
+    let user = p.user
     let s = this.state
-		switch(auth.currently){
+		switch(user.currently){
 			case C.SIGNED_IN: return (
-				<div className="authpanel">
+				<div className="userpanel">
           <div id="ivisible_recaptcha"></div>
-					<span>Logged in as {auth.username}.</span>
-          <span>Email {String(auth.emailVerified)}</span>
-          <span> Phone {String(auth.phoneVerified)}</span>
+					<span>Logged in as {user.email}.</span>
+          <span>Email {String(user.emailVerified)}</span>
+          <span> Phone {String(user.phoneVerified)}</span>
           <PhoneVerificationContainer />
           {' '}<button onClick={p.logoutUser}>Log out</button>
 				</div>
