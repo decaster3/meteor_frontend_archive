@@ -11,12 +11,14 @@ export default class Root extends Component {
   render() {
     const routes = configureRoutes();
     const { store, history } = this.props;
-    return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          {routes}
-        </ConnectedRouter>
-      </Provider>
+    return ( <div>
+
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            {routes}
+          </ConnectedRouter>
+        </Provider>
+      </div>
     );
   }
 }

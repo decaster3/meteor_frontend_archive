@@ -7,10 +7,12 @@ import MainMenuComponent from './components/menu/main_menu_component';
 import Profile from './components/profile_page/profile';
 import MainShoppingCartComponent from './components/shopping_cart_page/main_shopping_cart_component';
 import App from './components/App';
+import Geolocation from './components/geolocation/Geolocation'
 
 const configureRoutes = () => {
       var loggedIn = true; //firebase.auth().currentUser != null;
-      return (
+      return (<div>
+        <Geolocation/>
         <Switch>
           <Route exact path="/" component={App} />
           <Route path="/menu" component={MainMenuComponent}/>
@@ -19,7 +21,7 @@ const configureRoutes = () => {
           <Route path="/sign_in" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignIn/>))}/>
           <Route path="/sign_up" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignUp/>))}/>
           <Route path="/profile" render={() => (
-              loggedIn ? (
+              !loggedIn ? (
                 <Redirect to={{
                     pathname: '/sign_up',
                     state: {
@@ -30,6 +32,6 @@ const configureRoutes = () => {
                 <Profile/>
               )
             )}/>
-        </Switch>)
+        </Switch></div>)
       }
 export default configureRoutes
