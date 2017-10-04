@@ -3,62 +3,49 @@ import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { initLocation, setChaingingState, setLocation } from '../../actions/geolocation/geolocation_actions.js';
+let C = require("../../constants/geolocation/geolocation.js");
 
 class Geolocation extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      country: "Кыргызстан"
-    }
-    this.getLocation =this.getLocation.bind(this);
-    this.showPosition = this.showPosition.bind(this);
   }
+
+  componentDidMount(){
+    this.props.initLocation();
+  }
+
 
   render () {
+    const {locationState} = this.props.geolocation;
+    const {location} = this.props.geolocation;
 
-      return <p onClick = {() => this.getLocation()}>Geolocation: {this.state.country}!!!</p>
-  }
+    switch (locationState) {
+      case C.DETERMINED:
+        var determinedCountry = <p>Текущий город {location}. <span onClick={() => this.props.setChaingingState()}>Нажмите чтобы поменять!</span></p>;
+        return <div>{determinedCountry}</div>;
 
-  getLocation() {
-    console.log(1);
-    // if (navigator.geolocation) {
-    //     var p = navigator.geolocation.getCurrentPosition(this.showPosition);
-    //     console.log(p);
-    // } else {
-    //   console.log(2);
-    // }
+      case C.NOT_DETERMINE:
+        var currentLocation = <p>Текущий город {location}?
+          <span onClick={() => this.props.setChaingingState()}>Если нет нажмите!</span>
+        </p>;
+        return <div>{currentLocation}</div>;
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        var googleMapsClient = require('@google/maps').createClient({
-          key: 'AIzaSyDeRt-ekVSI0anD_b1zE5Kl7WobsRGutvc'
+      case C.CHANGING:
+        const countries = this.props.geolocation.legalLocations.map((location, index) => {
+            return <p key={index} onClick={() => this.props.setLocation(location)} >{location}</p>
         });
-        googleMapsClient.reverseGeocode({
-             latlng: [lat, lng],
-             result_type: ['country'],
-             location_type: ['ROOFTOP', 'APPROXIMATE']
-           },
-           (err, response) => {
-             var country = response.json.results[0].formatted_address
-             console.log(country);
-             if (!err) {
-               this.setState({country});
-           }
-         })
 
-      },
-      (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
-  }
+        var cityPicker = (<div>
+            Выбирите страну:
+            {countries}
+        </div>);
 
-  showPosition(position) {
-      var country = "Latitude: " + position.coords.latitude +
-      "<br>Longitude: " + position.coords.longitude;
-      this.setState({country});
+        return <div>{cityPicker}</div>;
+
+      default:
+        return <p>Мы вас ищем:)</p>;
+    }
   }
 }
 
@@ -66,17 +53,19 @@ class Geolocation extends Component {
 
 function mapStateToProps(state){
     return {
-
+      geolocation: state.geolocation
     }
 }
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators(
     {
-
+      initLocation: initLocation,
+      setLocation: setLocation,
+      setChaingingState: setChaingingState
     },
     dispatch
   )
 }
 
-export default (Geolocation)
+export default connect(mapStateToProps, mapDispatchToProps)(Geolocation)
