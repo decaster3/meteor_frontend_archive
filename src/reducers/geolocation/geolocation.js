@@ -2,6 +2,8 @@ var C = require("../../constants/geolocation/geolocation.js");
 var initialState = require("./initial_state.js");
 
 module.exports = function(currentstate = initialState, action){
+  if (currentstate.locationState == C.DETERMINED)
+    return currentstate;
   switch(action.type){
     case C.SEND_LOCATION:
       return {

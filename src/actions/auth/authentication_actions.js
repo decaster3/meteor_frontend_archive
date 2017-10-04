@@ -16,8 +16,9 @@ import { checkUserLocation } from '../geolocation/geolocation_actions.js'
 					authRef.on('value', function(snapshot){
 						dispatch({
 							type: C.SIGNIN_USER,
-							default_country: snapshot.val().default_country || 'almaty',
-							default_city: snapshot.val().default_city || 'almaty',
+							uid: snapshot.key,
+							default_country: snapshot.val().default_country,
+							default_city: snapshot.val().default_city,
 							authProviders: snapshot.val().authProviders,
 							email: snapshot.val().email,
 							phone: snapshot.val().phoneNumber,
@@ -26,7 +27,7 @@ import { checkUserLocation } from '../geolocation/geolocation_actions.js'
 							emailVerified: snapshot.val().emailVerified,
 							username: snapshot.val().username
 						});
-						checkUserLocation()
+						dispatch(checkUserLocation());
 					})
 				} else {
 					if (getState().user.currently !== C.ANONYMOUS){ // иногда выбрасывал что залогинен, хотя не был, хз почему, это костыль

@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 var C = require("../../constants/geolocation/geolocation.js");
+var AUTH = require("../../constants/auth/authentication.js");
 
 export function getLocation() {
   return function(dispatch, getState){
@@ -20,10 +21,8 @@ export function getLocation() {
         if (!err) {
           var location = response.json.results[0].formatted_address;
           if (!getState().geolocation.legalLocations.includes(location))
-            dispatch({ type: C.SET_DEFAULT });
-          else {
-            checkUserLocation(location);
-          }
+            location = getState().geolocation.defaultLocation;
+          dispatch(checkUserLocation(location));
         }
         else
           dispatch({ type: C.SET_DEFAULT });
@@ -36,25 +35,31 @@ export function getLocation() {
 }
 
 //TODO add to auth state changer
-export function checkUserLocation(location = null) {
+export function checkUserLocation(default_country = null) {
   return function(dispatch, getState){
-    if (!location)
-      location = getState().geolocation.location;
+
+    if (!default_country){
+      default_country = getState().geolocation.location;
+      if (!default_country)
+        return;
+    }
 
     var user = getState().user;
     var locationState = C.NOT_DETERMINE;
 
-    if (user.currently == C.SIGNED_IN) {
-      var userCountry = user.country;
+    if (user.currently == AUTH.SIGNED_IN) {
+
+      var userCountry = user.default_country;
 
       if (!userCountry)
-        changeUserCountry(country);
+        changeUserCountry(default_country);
 
-      confused = userCountry == location ? C.DETERMINED : C.NOT_DETERMINE;
+      if (userCountry == default_country)
+        locationState = C.DETERMINED
     }
     dispatch({
       type: C.SEND_LOCATION,
-      location,
+      location: default_country,
       locationState
     });
   }
@@ -70,7 +75,7 @@ export function setLocation(location) {
   return function(dispatch, getState) {
     var user = getState().user;
 
-    if (user.currently == C.SIGNED_IN) {
+    if (user.currently == AUTH.SIGNED_IN) {
       changeUserCountry(location);
     }
 
@@ -79,13 +84,14 @@ export function setLocation(location) {
       location,
       locationState: C.DETERMINED
     });
+
   }
 }
 
-export function changeUserCountry(country){
-  var user = firebase.auth.currentUser;
+export function changeUserCountry(default_country){
+  var user = firebase.auth().currentUser;
   var {uid} = user;
-  firebase.database().ref().child('users').child(uid).child("country").set(country);
+  firebase.database().ref().child('users').child(uid).child("default_country").set(default_country);
 }
 
 export function initLocation() {
