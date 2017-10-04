@@ -5,6 +5,7 @@ import CategoryReducer from './menu/category_reducer.js'
 import ProductReducer from './menu/product_reducer.js'
 import CartReducer from './cart/cart_reducer.js'
 import ProfileSettingReducer from './profile/profile_settings_reducer.js'
+import Geolocation from './geolocation/geolocation.js'
 
 const rootReducer = combineReducers({
   user: AuthReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   categories: CategoryReducer,
   cart: CartReducer,
   products: ProductReducer,
-  profile_settings: ProfileSettingReducer
+  profile_settings: ProfileSettingReducer,
+  geolocation: Geolocation
 
 });
 

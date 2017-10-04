@@ -7,19 +7,21 @@ import MainMenuComponent from './components/menu/main_menu_component';
 import MainShoppingCartComponent from './components/shopping_cart_page/main_shopping_cart_component';
 import App from './components/App';
 import MainProfileComponent from './components/profile_page/main_profile_component';
+import Geolocation from './components/geolocation/Geolocation'
 
 const configureRoutes = () => {
       var loggedIn = true; //firebase.auth().currentUser != null;
-      return (
-        <Switch>
-          <Route exact path="/" component={App} />
-          <Route path="/menu" component={MainMenuComponent}/>
-          <Route path="/profile" component={MainProfileComponent}/>
-          <Route path="/authentication" component={MainAuthComponent}/>
-          <Route path="/cart" component={MainShoppingCartComponent}/>
-          <Route path="/sign_in" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignIn/>))}/>
-          <Route path="/sign_up" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignUp/>))}/>
-
-        </Switch>)
+      return (<div>
+                <Geolocation/>
+                <Switch>
+                  <Route exact path="/" component={App} />
+                  <Route path="/menu" component={MainMenuComponent}/>
+                  <Route path="/profile" component={MainProfileComponent}/>
+                  <Route path="/authentication" component={MainAuthComponent}/>
+                  <Route path="/cart" component={MainShoppingCartComponent}/>
+                  <Route path="/sign_in" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignIn/>))}/>
+                  <Route path="/sign_up" render={() => (!loggedIn ? (<Redirect to="/menu"/>) : (<SignUp/>))}/>
+                </Switch>
+              </div>)
       }
 export default configureRoutes

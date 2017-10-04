@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 let C = require("../../constants/auth/authentication.js")
+import { checkUserLocation } from '../geolocation/geolocation_actions.js'
 
 	// вызывается при инициализации приложения, затем слушает на изменения
 	export function startListeningToAuth(){
@@ -25,6 +26,7 @@ let C = require("../../constants/auth/authentication.js")
 							emailVerified: snapshot.val().emailVerified,
 							username: snapshot.val().username
 						});
+						checkUserLocation()
 					})
 				} else {
 					if (getState().user.currently !== C.ANONYMOUS){ // иногда выбрасывал что залогинен, хотя не был, хз почему, это костыль
