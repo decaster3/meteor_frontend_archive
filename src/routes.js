@@ -10,9 +10,8 @@ import MainProfileComponent from './components/profile_page/main_profile_compone
 import Geolocation from './components/geolocation/Geolocation'
 
 const configureRoutes = () => {
-      var loggedIn = true; //firebase.auth().currentUser != null;
+      var loggedIn = true; //firebase.auth().currentUser != null;                <Geolocation/>
       return (<div>
-                <Geolocation/>
                 <Switch>
                   <Route exact path="/" component={App} />
                   <Route path="/menu" component={MainMenuComponent}/>

@@ -1,0 +1,64 @@
+/*.menu-slider {
+  display: table;
+  position: relative;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}*/
+
+.menu-slider .menu-slider-wrapper {
+  /*position: relative;*/
+  /*width: calc(100% * n);*/
+  /*top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  -webkit-transition: 1s;
+  -o-transition: 1s;
+  transition: 1s;
+  -webkit-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;*/
+}
+.menu-slider .menu-slider-wrapper .menu-slider-item-wrapper {
+  padding: 0 15px;
+}
+.menu-slider .menu-slider-wrapper .menu-slider-item,
+.menu-slider .menu-slider-wrapper .menu-pizzas-item-item {
+  /*width: calc(100% / n);*/
+  /*display: inline;*/
+  /*float: left;*/
+  /*width: 200px;*/
+  background-color: #283246;
+  /*padding: 15px 0 20px 0;*/
+  color: #fff;
+}
+
+.menu-slider .menu-slider-wrapper .menu-slider-item .menu-slider-item-image {
+  width: 200px;
+}
+
+.menu-slider .menu-slider-wrapper .menu-slider-item .menu-slider-item-description {
+
+}
+
+.slider-arrow {
+  border: 0;
+  background-color: transparent;
+  position: absolute;
+  color: #000;
+}
+.slider-arrow:hover {
+  cursor: pointer;
+}
+.slider-arrow-left {
+  top: 50%;
+  left: -28px;
+}
+.slider-arrow-right {
+  top: 50%;
+  left: 100%;
+}
