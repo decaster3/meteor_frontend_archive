@@ -13,10 +13,6 @@ class DetailSettingsComponent extends Component {
     let p = this.props
     let C = require('../../../constants/profile/profile')
     switch (p.profile_settings.profile_settings_category) {
-      case C.LOADING_CATEGORY:
-        return(
-          <div>Loading</div>
-        )
       case C.ADDRESSES_SELECTED:
         return(
           <MainAddressesComponent />

@@ -15,21 +15,40 @@ class Navbar extends Component {
   render () {
     let C = require("../../constants/auth/authentication.js");
     const user = this.props.user;
-
     var userNavBar = ( <Link to='/authentication'>Аутентификация</Link>)
     if (user.currently == C.SIGNED_IN) {
-      userNavBar = (<div>
-          <h2>Привет, {user.username}!</h2>
+      userNavBar = (
+        <div>
           <Link to='/profile'>Профиль</Link>
-      </div>);
+        </div>);
     }
-    return <div>
-      <Link to="/">LOGO</Link>
-      <Geolocation/>
-      {userNavBar}
-      <Link to='/menu'>Меню</Link>
-      <Link to='/cart'>Корзина</Link>
-    </div>
+    return (
+      <header id="header">
+        <div className="navbar">
+        <div className="container">
+          <div className="logo">
+            <Link to='/'>
+              <img src="assets/img/logo.png" className="logo" alt="" />
+            </Link>
+          </div>
+          <Geolocation/>
+          <div className="menu align-self-bottom">
+            <div className="d-none d-md-block">
+              <Link to='/menu'>Меню</Link>
+              <span className="divider">|</span>
+              <Link to='/cart'>Корзина</Link>
+              <span className="divider">|</span>
+              <a href="#">{userNavBar}</a>
+              <span className="divider">|</span>
+              <a href="#">Войти</a>
+            </div>
+            <div className="d-md-none">
+              <i className="fa fa-bars fa-2x" aria-hidden="true" className="menu-toogle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>)
   }
 }
 
