@@ -1,0 +1,8 @@
+﻿@font-face {
+  font-family: "Harabara Bold";
+  src: url("../fonts/Harabara.otf") format("opentype");
+  font-weight: normal;font-style:normal;
+}
+body,h1,h2,h3,a,span {
+  font-family: 'Harabara Bold', sans-serif;
+}

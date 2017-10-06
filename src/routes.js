@@ -10,9 +10,12 @@ import MainProfileComponent from './components/profile_page/main_profile_compone
 import Navbar from './containers/navbar/navbar_container'
 
 const configureRoutes = () => {
-      var loggedIn = true; //firebase.auth().currentUser != null;
+      var loggedIn = true; //firebase.auth().currentUser != null;                <Geolocation/>
       return (<div>
+<<<<<<< HEAD
                 <Navbar/>
+=======
+>>>>>>> creating_nav_bar
                 <Switch>
                   <Route exact path="/" component={App} />
                   <Route path="/menu" component={MainMenuComponent}/>

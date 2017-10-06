@@ -3,7 +3,6 @@ import * as firebase from 'firebase';
 
 export function setSettingsCategory(category){
   return function(dispatch) {
-    dispatch({type: C.LOADING})
     dispatch({type: C.SETTINGS_CATEGORY_SELECTED, category: category})
   }
 }
