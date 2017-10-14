@@ -58,6 +58,16 @@ export function createCart(){
     }
   }
 };
+export function birthdayDiscountOn(){
+  return function(dispatch){
+    dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
+  }
+}
+export function birthdayDiscountOff(){
+  return function(dispatch){
+    dispatch({type: C.BIRTHDAY_DICOUNT_OFF, cart: cookies.get('cart')})
+  }
+}
 
 export function removeProductFromCart(product){
   var current_cart = cookies.get('cart');

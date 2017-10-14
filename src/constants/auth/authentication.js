@@ -1,5 +1,6 @@
 module.exports = {
   //state
+  NOONE: "NOONE",
   SIGNED_IN: "SIGNED_IN",
   ANONYMOUS: "ANONYMOUS",
   AWAITING: "AWAITING",

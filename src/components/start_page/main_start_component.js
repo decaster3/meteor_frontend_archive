@@ -22,7 +22,7 @@ class MainStartPage extends Component {
           feachersContainer = feachers.map((feacha, index) => {
           return (
               <div key = {index} className="col-12 row justify-content-center pizza-slider-item">
-                <div className="col-lg-6 col-12 order-2 order-lg-1 align-self-center">
+                <div className="col-lg-5 col-12 order-2 order-lg-1 align-self-center">
                   <div className="pizza-name">{feacha}</div>
                   <button className="button">ЗАКАЗАТЬ</button>
                 </div>
