@@ -1,5 +1,5 @@
 import Cookies from 'universal-cookie';
-
+import * as firebase from 'firebase';
 let C = require("../../constants/cart/cart.js")
 let cookies = new Cookies();
 
@@ -66,6 +66,22 @@ export function birthdayDiscountOn(){
 export function birthdayDiscountOff(){
   return function(dispatch){
     dispatch({type: C.BIRTHDAY_DICOUNT_OFF, cart: cookies.get('cart')})
+  }
+}
+export function setGiftProducts(){
+  return function(dispatch){
+    dispatch({type: C.LOADING_GIFT_PRODUCTS})
+    let giftProductsRef = firebase.database().ref().child('products_for_promotion').child('gift_products')
+    var giftProducts = []
+    giftProductsRef.once('value')
+      .then(function(snapshot){
+        snapshot.forEach(function(gp){
+          giftProducts.push(gp)
+        })
+      }
+    ).then( () => {
+      dispatch({type: C.SET_GIFT_PRODUCTS, gitftProducts: giftProducts})
+    })
   }
 }
 

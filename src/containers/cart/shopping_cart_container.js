@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import {addProductToCart, createCart, removeProductFromCart, birthdayDiscountOn, birthdayDiscountOff} from '../../actions/cart/cart_actions'
+import { setGiftProducts, addProductToCart, createCart, removeProductFromCart, birthdayDiscountOn, birthdayDiscountOff } from '../../actions/cart/cart_actions'
 import ProductsExistComponent from '../../components/shopping_cart_page/products_exist_component'
 import EmptyCartComponent from '../../components/shopping_cart_page/empty_cart_component'
 import PromoCartContainer from './promo_cart_container.js'
@@ -13,9 +13,13 @@ class ShoppingCartContainer extends Component {
     this.state = {
       step: 1
     }
+    this.setGiftProductsView = this.setGiftProductsView.bind(this)
   }
 
   componentDidMount(){
+    this.props.createCart()
+    //короче вот эта функция setGiftProducts() все ломает по циферкам иди
+    this.props.setGiftProducts()
     var stepFir = 0
     let authRef = firebase.database().ref().child('products_for_promotion')
     authRef.once('value')
@@ -27,16 +31,28 @@ class ShoppingCartContainer extends Component {
         step: stepFir
       })
     })
-    this.props.createCart()
   }
 
+  changePromotionView(){
+    this.setState({
+      stepView: !this.state.stepView
+    })
+  }
+
+  setGiftProductsView(){
+    this.props.setGiftProducts()
+  }
+//там короче идет проверка на то чтобы сумма была больше чем 1000
+//из файрбэйса и затем начинает грузить подарочные товары из файрбэйса
+//она диспатчит всякую хуйню, из за этого все ререндерится и ломается
   render(){
+    console.log(1);
     let p = this.props
     let s = this.state
-    console.log(p.cart);
     var products = p.cart.products
     var cartElements = <div>LOADING</div>
-    if (products){
+    if (p.cart.products){
+
         cartElements = products.map((product, index) =>
         <div key = {index}>
           <span>{product.name}</span>
@@ -55,7 +71,7 @@ class ShoppingCartContainer extends Component {
               cartElements = {cartElements} />
             {s.step != 1?
               (p.cart.priceTotalCart > s.step?
-                <PromoCartContainer />:
+                <PromoCartContainer cart = {p.cart} setGiftProducts = {p.setGiftProducts}/>:
               <div>
                 Наберите блюд на сумму {s.step} и получите блюдо в подарок!
               </div>)
@@ -87,7 +103,8 @@ function mapDispatchToProps(dispatch){
       birthdayDiscountOff: birthdayDiscountOff,
       addProductToCart: addProductToCart,
       createCart: createCart,
-      removeProductFromCart:removeProductFromCart
+      removeProductFromCart:removeProductFromCart,
+      setGiftProducts: setGiftProducts
     },
     dispatch
   )
