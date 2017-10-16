@@ -53,6 +53,14 @@ class MainStartPage extends Component {
             </div>
           </header>
           <Products/>
+          <section id="menu">
+            <div className="container">
+              <h2 className="text-center my-4 py-4">Как это работает</h2>
+              <div className="section-text">
+                Вот так мы работаем. Тут картинки всякие, тексты. В общем как-то так.
+              </div>
+            </div>
+          </section>
         </div>
       )
     }
