@@ -1,6 +1,7 @@
 import React from 'react';
 let C = require("../../constants/cart/cart.js")
 import GiftProductsComponent from '../../components/shopping_cart_page/gift_products_component'
+import GiftProductsInCartComponent from '../../components/shopping_cart_page/gift_products_in_cart_component'
 class PromoCartContainer extends React.Component {
   constructor(props){
     super(props)
@@ -17,15 +18,30 @@ class PromoCartContainer extends React.Component {
         )
       case C.GIFT_PRODUCTS_LOADED:
         return(
-          <GiftProductsComponent
-            giftProducts = {p.cart.gitftProducts}
-            addGiftProductToCart = {p.addGiftProductToCart}
-            removeGiftProductFromCart = {p.removeGiftProductFromCart} />
+          <div>
+            {
+              p.cart.choosenGifts?
+                p.cart.choosenGifts.length > 0?
+                  (<GiftProductsInCartComponent
+                    removeGiftProductFromCart = {p.removeGiftProductFromCart}
+                    choosenGifts = {p.cart.choosenGifts}/>)
+                :
+                  (<div> Вы не выбрали подарка! </div>)
+              :
+                (<div> Вы не выбрали подарка! </div>)
+            }
+            <GiftProductsComponent
+              validationGiftsCurrently = {p.cart.validationGiftsCurrently}
+              giftProducts = {p.cart.gitftProducts}
+              addGiftProductToCart = {p.addGiftProductToCart}
+              removeGiftProductFromCart = {p.removeGiftProductFromCart} />
+          </div>
         )
+
       default:
         return(
           <div>
-            Произошла проблема при загрузке подарков, пожалуйста перезагрузите страницу
+            Произошла проблема при загрузке подарков, пожалуйста перезагрузите страницу и проверьте подключение к интернету
           </div>
         )
     }

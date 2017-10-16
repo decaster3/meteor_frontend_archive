@@ -18,6 +18,7 @@ export function addProductToCart(product,quantity){
           if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
             dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
           }
+          validateCurrentGifts(getState().cart, dispatch)
           return
         }
 
@@ -43,6 +44,7 @@ export function addProductToCart(product,quantity){
         if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
           dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
         }
+        validateCurrentGifts(getState().cart, dispatch)
     }catch(err){
       console.log(err.message);
     }
@@ -65,13 +67,17 @@ export function createCart(){
   }
 };
 export function birthdayDiscountOn(){
-  return function(dispatch){
+  return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
+    dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
+    validateCurrentGifts(getState().cart, dispatch)
   }
 }
 export function birthdayDiscountOff(){
-  return function(dispatch){
+  return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_OFF, cart: cookies.get('cart')})
+    dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
+    validateCurrentGifts(getState().cart, dispatch)
   }
 }
 export function setGiftProducts(){
@@ -91,29 +97,52 @@ export function setGiftProducts(){
   }
 }
 
+export function validateCurrentGifts(cart, dispatch){
+  var stepFir = 0
+  let stepRef = firebase.database().ref().child('products_for_promotion')
+    stepRef.once('value')
+      .then(function(snapshot){
+        stepFir = snapshot.val().step
+      }
+    ).then( () => {
+      if (cart.choosenGifts){
+        if (cart.choosenGifts.length + 1 > cart.priceTotalCart/stepFir){
+          dispatch({type: C.VALIDATE_GIFTS, validationGiftsCurrently: C.NO_MORE_GIFTS})
+        }
+        else {
+          dispatch({type: C.VALIDATE_GIFTS, validationGiftsCurrently: C.ONE_MORE_GIFT})
+        }
+      }
+    })
+}
+
 export function addGiftProductToCart(product){
     return function(dispatch,getState){
+      dispatch({type: C.VALIDATE_GIFTS, validationGiftsCurrently: C.LOCK_GIFTS_ADDING})
       if(getState().cart.choosenGifts){
-
-        console.log(1);
         let currentGifts = getState().cart.choosenGifts
         dispatch({type: C.CHOOSE_GIFT, choosenGifts: [...currentGifts, product]})
       }else {
         dispatch({type: C.CHOOSE_GIFT, choosenGifts: [product]})
       }
+      validateCurrentGifts(getState().cart, dispatch)
     }
 }
 
 export function removeGiftProductFromCart(product){
+
     return function(dispatch,getState){
       if(getState().cart.choosenGifts){
-        let currentGifts = getState().cart.choosenGifts
+        let currentGifts = getState().cart.choosenGifts.slice(0)
         for (var i = 0; i < currentGifts.length; i++){
           if (currentGifts[i].name == product.name){
+            console.log(currentGifts[i].name);
             currentGifts.splice(i,1)
           }
         }
+
         dispatch({type: C.CHOOSE_GIFT, choosenGifts: currentGifts})
+        validateCurrentGifts(getState().cart, dispatch)
       }else {
         console.log("There is no gift products in your cart!");
       }
@@ -135,6 +164,8 @@ export function removeProductFromCart(product){
               if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
                 dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
               }
+              dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
+              validateCurrentGifts(getState().cart, dispatch)
               return;
             }
             else{
@@ -145,6 +176,8 @@ export function removeProductFromCart(product){
               if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
                 dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
               }
+              dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
+              validateCurrentGifts(getState().cart, dispatch)
               return;
             }
           }

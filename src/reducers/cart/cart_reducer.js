@@ -45,6 +45,11 @@ module.exports = function(currentstate = initialState , action){
         ...currentstate,
         choosenGifts: action.choosenGifts
       }
+    case C.VALIDATE_GIFTS:
+      return {
+        ...currentstate,
+        validationGiftsCurrently: action.validationGiftsCurrently
+      }
     default: return currentstate;
   }
 }

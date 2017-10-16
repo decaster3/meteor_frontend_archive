@@ -6,7 +6,9 @@ import EmptyCartComponent from '../../components/shopping_cart_page/empty_cart_c
 import PromoCartContainer from './promo_cart_container.js'
 import * as firebase from 'firebase';
 
-import { addGiftProductToCart,
+import {
+  validateCurrentGifts,
+  addGiftProductToCart,
   removeGiftProductFromCart,
   setGiftProducts,
   addProductToCart,
@@ -30,8 +32,8 @@ class ShoppingCartContainer extends Component {
     //короче вот эта функция setGiftProducts() все ломает по циферкам иди
     this.props.setGiftProducts()
     var stepFir = 0
-    let authRef = firebase.database().ref().child('products_for_promotion')
-    authRef.once('value')
+    let stepRef = firebase.database().ref().child('products_for_promotion')
+    stepRef.once('value')
       .then(function(snapshot){
         stepFir = snapshot.val().step
       }
@@ -57,7 +59,6 @@ class ShoppingCartContainer extends Component {
     var products = p.cart.products
     var cartElements = <div>LOADING</div>
     if (p.cart.products){
-
         cartElements = products.map((product, index) =>
         <div key = {index}>
           <span>{product.name}</span>

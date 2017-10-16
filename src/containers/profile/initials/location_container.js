@@ -27,7 +27,7 @@ class LocationContainer extends Component {
     var s = this.state
     var user = p.user
     var profile_settings = p.profile_settings
-    if (user.currently != "ANONYMOUS"){
+    if (user.currently != "NOONE"){
     switch (profile_settings.changing) {
       case C.CHANGING_LOCATION:
       return(
