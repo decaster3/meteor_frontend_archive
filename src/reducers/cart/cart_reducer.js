@@ -3,51 +3,47 @@ let initialState = require("./initial_state_cart.js");
 
 module.exports = function(currentstate = initialState , action){
   switch(action.type){
-
     case C.UPDATE_CART:
       return {
+        ...currentstate,
         currently: C.CART_EXIST,
         priceTotalCart: getCartTotal(action.cart),
         products_quantity: action.cart.quantityproducts,
         products: action.cart.products,
-        gitftProducts: currentstate.gitftProducts,
-        gitftProductsCurrently: currentstate.gitftProductsCurrently
       };
     case C.BIRTHDAY_DICOUNT_ON:
       return {
-        currently: currentstate.currently,
+        ...currentstate,
+        birthdayCurrently: C.BIRTHDAY_ON,
         priceTotalCart: Math.round(getCartTotal(action.cart) * 0.75),
-        products_quantity: currentstate.quantityproducts,
-        products: currentstate.products,
-        gitftProducts: currentstate.gitftProducts,
-        gitftProductsCurrently: currentstate.gitftProductsCurrently
       }
     case C.BIRTHDAY_DICOUNT_OFF:
       return {
-        currently: currentstate.currently,
+        ...currentstate,
+        birthdayCurrently: C.BIRTHDAY_OFF,
         priceTotalCart: getCartTotal(action.cart),
-        products_quantity: currentstate.quantityproducts,
-        products: currentstate.products,
-        gitftProducts: currentstate.gitftProducts,
-        gitftProductsCurrently: currentstate.gitftProductsCurrently
       }
     case C.LOADING_GIFT_PRODUCTS:
       return {
-        currently: currentstate.currently,
-        priceTotalCart: currentstate.priceTotalCart,
-        products_quantity: currentstate.quantityproducts,
-        products: currentstate.products,
+        ...currentstate,
         gitftProductsCurrently: C.GIFT_PRODUCTS_LOADING,
         gitftProducts: currentstate.gitftProducts
       }
     case C.SET_GIFT_PRODUCTS:
       return {
-        currently: currentstate.currently,
-        priceTotalCart: currentstate.priceTotalCart,
-        products_quantity: currentstate.quantityproducts,
-        products: currentstate.products,
+        ...currentstate,
         gitftProductsCurrently: C.GIFT_PRODUCTS_LOADED,
         gitftProducts: action.gitftProducts
+      }
+    case C.CHOOSE_GIFT:
+      return {
+        ...currentstate,
+        choosenGifts: action.choosenGifts
+      }
+    case C.REMOVE_GIFT:
+      return {
+        ...currentstate,
+        choosenGifts: action.choosenGifts
       }
     default: return currentstate;
   }

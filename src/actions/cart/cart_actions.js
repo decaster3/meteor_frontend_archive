@@ -5,7 +5,7 @@ let cookies = new Cookies();
 
 export function addProductToCart(product,quantity){
   var current_cart = cookies.get('cart')
-  return function(dispatch){
+  return function(dispatch, getState){
     try {
       for(let i = 0; i < current_cart.quantityproducts; i++){
         if (product.product_id == current_cart.products[i].product_id &&
@@ -15,6 +15,9 @@ export function addProductToCart(product,quantity){
           // current_cart.quantityproducts +=1;
           cookies.set('cart', current_cart, {path: '/', maxAge: 6*60*60})
           dispatch({type: C.UPDATE_CART, cart: current_cart})
+          if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
+            dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
+          }
           return
         }
 
@@ -37,6 +40,9 @@ export function addProductToCart(product,quantity){
         ,{path: '/', maxAge: 6*60*60})
 
         dispatch({type: C.UPDATE_CART, cart: cookies.get('cart')})
+        if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
+          dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
+        }
     }catch(err){
       console.log(err.message);
     }
@@ -76,7 +82,7 @@ export function setGiftProducts(){
     giftProductsRef.once('value')
       .then(function(snapshot){
         snapshot.forEach(function(gp){
-          giftProducts.push(gp)
+          giftProducts.push(gp.val())
         })
       }
     ).then( () => {
@@ -85,9 +91,38 @@ export function setGiftProducts(){
   }
 }
 
+export function addGiftProductToCart(product){
+    return function(dispatch,getState){
+      if(getState().cart.choosenGifts){
+
+        console.log(1);
+        let currentGifts = getState().cart.choosenGifts
+        dispatch({type: C.CHOOSE_GIFT, choosenGifts: [...currentGifts, product]})
+      }else {
+        dispatch({type: C.CHOOSE_GIFT, choosenGifts: [product]})
+      }
+    }
+}
+
+export function removeGiftProductFromCart(product){
+    return function(dispatch,getState){
+      if(getState().cart.choosenGifts){
+        let currentGifts = getState().cart.choosenGifts
+        for (var i = 0; i < currentGifts.length; i++){
+          if (currentGifts[i].name == product.name){
+            currentGifts.splice(i,1)
+          }
+        }
+        dispatch({type: C.CHOOSE_GIFT, choosenGifts: currentGifts})
+      }else {
+        console.log("There is no gift products in your cart!");
+      }
+    }
+}
+
 export function removeProductFromCart(product){
   var current_cart = cookies.get('cart');
-  return function(dispatch){
+  return function(dispatch, getState){
       if (current_cart.quantityproducts > 0){
         for(var i = 0; i < current_cart.quantityproducts; i++){
           if (product.product_id == current_cart.products[i].product_id &&
@@ -97,6 +132,9 @@ export function removeProductFromCart(product){
               current_cart.products[i].quantity -= 1;
               cookies.set('cart', current_cart, {path: '/'});
               dispatch({type: C.UPDATE_CART, cart: current_cart})
+              if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
+                dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
+              }
               return;
             }
             else{
@@ -104,6 +142,9 @@ export function removeProductFromCart(product){
               current_cart.quantityproducts -=1;
               cookies.set('cart', current_cart, {path: '/'});
               dispatch({type: C.UPDATE_CART, cart: current_cart})
+              if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
+                dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
+              }
               return;
             }
           }
