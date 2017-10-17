@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { pizza_fade_slider_init } from '../../assets/js/slider.js'
 import * as firebase from 'firebase'
+import Products from './start_page_products'
 
 class MainStartPage extends Component {
   constructor(props){
@@ -40,15 +41,27 @@ class MainStartPage extends Component {
 
   render () {
     console.log(this.state.feacherView)
+
     if(this.state.feacherView != null){
       return (
-<header id="header">
-  <div className="header-wrapper container d-flex justify-content-center">
-    <div className="col-12 align-self-center text-center pizza-fade-slider">
-      {this.state.feacherView}
-    </div>
-  </div>
-</header>
+        <div>
+          <header id="header">
+            <div className="header-wrapper container d-flex justify-content-center">
+              <div className="col-12 align-self-center text-center pizza-fade-slider">
+                {this.state.feacherView}
+              </div>
+            </div>
+          </header>
+          <Products/>
+          <section id="menu">
+            <div className="container">
+              <h2 className="text-center my-4 py-4">Как это работает</h2>
+              <div className="section-text">
+                Вот так мы работаем. Тут картинки всякие, тексты. В общем как-то так.
+              </div>
+            </div>
+          </section>
+        </div>
       )
     }
     else {
