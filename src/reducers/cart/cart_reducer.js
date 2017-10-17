@@ -50,6 +50,11 @@ module.exports = function(currentstate = initialState , action){
         ...currentstate,
         validationGiftsCurrently: action.validationGiftsCurrently
       }
+    case C.VALIDATE_TOTAL_CART:
+      return {
+        ...currentstate,
+        order_possibility: action.order_possibility
+      }
     default: return currentstate;
   }
 }

@@ -7,7 +7,7 @@ import PromoCartContainer from './promo_cart_container.js'
 import * as firebase from 'firebase';
 
 import {
-  validateCurrentGifts,
+  validateTime,
   addGiftProductToCart,
   removeGiftProductFromCart,
   setGiftProducts,
@@ -31,6 +31,7 @@ class ShoppingCartContainer extends Component {
     this.props.createCart()
     //короче вот эта функция setGiftProducts() все ломает по циферкам иди
     this.props.setGiftProducts()
+    validateTime()
     var stepFir = 0
     let stepRef = firebase.database().ref().child('products_for_promotion')
     stepRef.once('value')

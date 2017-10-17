@@ -18,7 +18,6 @@
     "remove-dist": "rimraf ./dist",
     "prebuild": "npm run clean-dist && npm run lint",
     "build": "babel-node tools/build.js && npm run open:dist",
-
     "open:cover": "opn ./coverage/lcov-report/index.html",
     "analyze-bundle": "babel-node ./tools/analyzeBundle.js"
   },
@@ -28,10 +27,13 @@
     "@google/maps": "0.4.3",
     "axios": "0.16.2",
     "firebase": "4.3.1",
+    "fs": "0.0.1-security",
     "lodash": "4.17.4",
+    "moment": "2.19.1",
     "object-assign": "4.1.0",
     "react": "15.5.4",
     "react-dom": "15.5.4",
+    "react-fontawesome": "1.6.1",
     "react-redux": "5.0.5",
     "react-router": "4.2.0",
     "react-router-dom": "4.0.0",
@@ -39,7 +41,8 @@
     "redux": "3.6.0",
     "redux-promise": "0.5.3",
     "redux-thunk": "2.1.0",
-    "universal-cookie": "2.1.0"
+    "universal-cookie": "2.1.0",
+    "zoneinfo": "0.1.8"
   },
   "devDependencies": {
     "autoprefixer": "7.1.2",

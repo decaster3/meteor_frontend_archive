@@ -14,12 +14,13 @@ export function getLocation() {
 
       googleMapsClient.reverseGeocode({
          latlng: [lat, lng],
-         result_type: ['country'],
+         result_type: ['locality'],
          location_type: ['ROOFTOP', 'APPROXIMATE']
       }, (err, response) => {
 
         if (!err) {
           var location = response.json.results[0].formatted_address;
+          console.log(location);
           if (!getState().geolocation.legalLocations.includes(location))
             location = getState().geolocation.defaultLocation;
           dispatch(checkUserLocation(location));

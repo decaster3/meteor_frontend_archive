@@ -2,6 +2,7 @@ import Cookies from 'universal-cookie';
 import * as firebase from 'firebase';
 let C = require("../../constants/cart/cart.js")
 let cookies = new Cookies();
+var moment = require('moment');
 
 export function addProductToCart(product,quantity){
   var current_cart = cookies.get('cart')
@@ -18,7 +19,7 @@ export function addProductToCart(product,quantity){
           if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
             dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
           }
-          validateCurrentGifts(getState().cart, dispatch)
+          validateCart(getState().cart, dispatch)
           return
         }
 
@@ -44,7 +45,7 @@ export function addProductToCart(product,quantity){
         if(getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
           dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
         }
-        validateCurrentGifts(getState().cart, dispatch)
+        validateCart(getState().cart, dispatch)
     }catch(err){
       console.log(err.message);
     }
@@ -70,14 +71,14 @@ export function birthdayDiscountOn(){
   return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
     dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
-    validateCurrentGifts(getState().cart, dispatch)
+    validateCart(getState().cart, dispatch)
   }
 }
 export function birthdayDiscountOff(){
   return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_OFF, cart: cookies.get('cart')})
     dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
-    validateCurrentGifts(getState().cart, dispatch)
+    validateCart(getState().cart, dispatch)
   }
 }
 export function setGiftProducts(){
@@ -96,12 +97,33 @@ export function setGiftProducts(){
     })
   }
 }
+export function validateTime(){
+  var now = moment()
+  var startTime = {}
+  var endTime = {}
+  let timeWorkingRef = firebase.database().ref().child('time_working')
+  timeWorkingRef.once('value')
+    .then(function(snapshot){
+      startTime = moment(snapshot.val().start, 'hh:mm:ss')
+      endTime = moment(snapshot.val().end, 'hh:mm:ss')
+    })
+    .then( () => {
+      console.log(now);
+      if (!now.isBetween(endTime, startTime)){
+        console.log('yes');
+      }
+      else{
+        console.log('no');
+      }
+    })
+}
 
-export function validateCurrentGifts(cart, dispatch){
+export function validateCart(cart, dispatch){
   var stepFir = 0
   let stepRef = firebase.database().ref().child('products_for_promotion')
     stepRef.once('value')
       .then(function(snapshot){
+        // TODO:
         stepFir = snapshot.val().step
       }
     ).then( () => {
@@ -113,7 +135,17 @@ export function validateCurrentGifts(cart, dispatch){
           dispatch({type: C.VALIDATE_GIFTS, validationGiftsCurrently: C.ONE_MORE_GIFT})
         }
       }
+      // TODO:
+      if (cart.priceTotalCart > 2500){
+        dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CAN_MAKE_ORDER})
+      }
+      else {
+        dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CANT_MAKE_ORDER})
+      }
     })
+}
+export function makeOrder(){
+
 }
 
 export function addGiftProductToCart(product){
@@ -125,7 +157,7 @@ export function addGiftProductToCart(product){
       }else {
         dispatch({type: C.CHOOSE_GIFT, choosenGifts: [product]})
       }
-      validateCurrentGifts(getState().cart, dispatch)
+      validateCart(getState().cart, dispatch)
     }
 }
 
@@ -142,7 +174,7 @@ export function removeGiftProductFromCart(product){
         }
 
         dispatch({type: C.CHOOSE_GIFT, choosenGifts: currentGifts})
-        validateCurrentGifts(getState().cart, dispatch)
+        validateCart(getState().cart, dispatch)
       }else {
         console.log("There is no gift products in your cart!");
       }
@@ -165,7 +197,7 @@ export function removeProductFromCart(product){
                 dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
               }
               dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
-              validateCurrentGifts(getState().cart, dispatch)
+              validateCart(getState().cart, dispatch)
               return;
             }
             else{
@@ -177,7 +209,7 @@ export function removeProductFromCart(product){
                 dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: current_cart})
               }
               dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
-              validateCurrentGifts(getState().cart, dispatch)
+              validateCart(getState().cart, dispatch)
               return;
             }
           }
