@@ -33,7 +33,7 @@ class ShoppingCartContainer extends Component {
     this.props.createCart()
     //короче вот эта функция setGiftProducts() все ломает по циферкам иди
     this.props.setGiftProducts()
-    validateTime()
+    this.props.validateTime()
     var stepFir = 0
     let stepRef = firebase.database().ref().child('products_for_promotion')
     stepRef.once('value')
@@ -120,6 +120,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return bindActionCreators(
     {
+      validateTime: validateTime,
       addGiftProductToCart: addGiftProductToCart,
       removeGiftProductFromCart: removeGiftProductFromCart,
       birthdayDiscountOn: birthdayDiscountOn,

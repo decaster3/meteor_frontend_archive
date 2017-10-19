@@ -101,25 +101,30 @@ export function setGiftProducts(){
     })
   }
 }
-export function validateTime(){
+export function validateTime() {
   var now = moment()
   var startTime = {}
   var endTime = {}
   let timeWorkingRef = firebase.database().ref().child('time_working')
-  timeWorkingRef.once('value')
-    .then(function(snapshot){
-      startTime = moment(snapshot.val().start, 'hh:mm:ss')
-      endTime = moment(snapshot.val().end, 'hh:mm:ss')
-    })
-    .then( () => {
-      console.log(now);
-      if (!now.isBetween(endTime, startTime)){
-        console.log('yes');
-      }
-      else{
-        console.log('no');
-      }
-    })
+
+  return function(dispatch) {
+    timeWorkingRef.once('value')
+      .then(function(snapshot) {
+        startTime = moment(snapshot.val().start, 'hh:mm:ss')
+        endTime = moment(snapshot.val().end, 'hh:mm:ss')
+        if (startTime > endTime) {
+          endTime.add(1, "days");
+        }
+      })
+      .then( () => {
+        if (now.isBetween(startTime, endTime)) {
+          dispatch({type: C.VALIDATE_TIME, timeValidation: C.WORKING_TIME})
+        }
+        else {
+          dispatch({type: C.VALIDATE_TIME, timeValidation: C.NOT_WORKING_TIME})
+        }
+      })
+    }
 }
 
 export function makeOrder() {
