@@ -55,6 +55,11 @@ module.exports = function(currentstate = initialState , action){
         ...currentstate,
         order_possibility: action.order_possibility
       }
+    case C.VALIDATE_TIME:
+      return {
+        ...currentstate,
+        timeValidation: action.timeValidation
+      }
     default: return currentstate;
   }
 }
