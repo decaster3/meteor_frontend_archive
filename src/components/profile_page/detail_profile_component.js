@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import MainInitialsComponent from './main_initials_component'
-import MainEmailSocNetworksComponent from './main_email_soc_networks_component'
-import MainAddressesComponent from './main_addresses_component'
-
+import MainSettingsComponent from './settings/main_settings_component'
+import MainHistoryContainer from '../../containers/profile/history/main_history_container'
 export default class DetailSettingsComponent extends Component {
   constructor(props){
     super(props);
@@ -13,15 +11,19 @@ export default class DetailSettingsComponent extends Component {
     switch (p.selectedCategory) {
       case 3:
         return(
-          <MainAddressesComponent />
+          <MainSettingsComponent />
         )
       case 2:
         return(
-          <MainEmailSocNetworksComponent />
+          <div>
+            bonuses
+          </div>
         )
       default:
         return(
-          <MainInitialsComponent />
+          <div>
+            <MainHistoryContainer />
+          </div>
         )
     }
   }

@@ -10,10 +10,6 @@ import Navbar from './containers/navbar/navbar_container'
 const configureRoutes = () => {
       var loggedIn = true; //firebase.auth().currentUser != null;                <Geolocation/>
       return (<div>
-<<<<<<< HEAD
-                
-=======
->>>>>>> time_creation
                 <Switch>
                   <Route exact path="/" component={App} />
                   <Route path="/menu" component={MainMenuComponent}/>

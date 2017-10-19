@@ -7,7 +7,7 @@ export function setSettingsCategory(category){
   }
 }
 
-export function changeName(name, lastName){
+export function changeName(name, lastName, changeUsernameChanging){
   let authRef = firebase.database().ref().child('users')
   var user = firebase.auth().currentUser
   return function(dispatch){
@@ -17,7 +17,12 @@ export function changeName(name, lastName){
             username: name + " " + lastName,
           })
       }).then(() =>
-      {dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})})
+      {
+        dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})
+        changeUsernameChanging()
+      }
+
+    )
 }
 ////
 }
@@ -29,7 +34,7 @@ export function changeAvatar(){
 
 }
 
-export function changeLocation(country, city){
+export function changeLocation(country, city, func){
   let authRef = firebase.database().ref().child('users')
   var user = firebase.auth().currentUser
   return function(dispatch){
@@ -40,7 +45,10 @@ export function changeLocation(country, city){
             default_city: city
           })
       }).then(() =>
-      {dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})})
+      {
+        dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})
+        func()
+      })
   }
 }
 
@@ -323,7 +331,7 @@ export function changePassword(password) {
   }
 }
 
-export function addAddress(country, city, flat, building, comments){
+export function addAddress(country, city, flat, building, comments, func){
   let authRef = firebase.database().ref().child('users')
   var user = firebase.auth().currentUser
   return function(dispatch){
@@ -337,7 +345,9 @@ export function addAddress(country, city, flat, building, comments){
             comments: comments
           })
       }).then(() =>
-      {dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})})
+      {dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})
+        func()
+      })
   }
 }
 export function removeAddress(key){

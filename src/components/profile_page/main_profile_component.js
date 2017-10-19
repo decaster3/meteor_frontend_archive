@@ -1,11 +1,35 @@
 import React, { Component } from 'react'
-import MainSettingsComponent from './settings/main_settings_component'
-
+import DetailProfileComponent from './detail_profile_component'
 export default class MainProfileComponent extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      selectedCategory: 1
+    }
+    this.setCategory = this.setCategory.bind(this)
+  }
+  setCategory(num){
+    this.setState({
+      selectedCategory: num
+    })
+  }
+
   render(){
     return(
       <div>
-        <MainSettingsComponent />
+        <ul>
+          <li onClick = {() => this.setCategory(1)}>
+            History
+          </li>
+          <li onClick = {() => this.setCategory(2)}>
+            Bonuses
+          </li>
+          <li onClick = {() => this.setCategory(3)}>
+            Settings
+          </li>
+        </ul>
+        <DetailProfileComponent
+          selectedCategory = {this.state.selectedCategory}/>
       </div>
     )
   }
