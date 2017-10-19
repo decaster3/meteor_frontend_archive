@@ -6,5 +6,6 @@ module.exports =
     currently: C.CART_NOT_INITIALIZED,
     birthdayCurrently: C.BIRTHDAY_OFF,
     gitftProductsCurrently: C.GIFT_PRODUCTS_NOT_LOADED,
-    order_possibility: C.CANT_MAKE_ORDER
+    order_possibility: C.CANT_MAKE_ORDER,
+    choosenGifts: []
   }

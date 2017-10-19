@@ -122,14 +122,18 @@ export function validateTime(){
     })
 }
 
-export function makeOrder() {
-  return function(dispatch,getState) {
+export function makeOrder(paymentType, meteors) {
+  return function(dispatch, getState) {
     var cart = getState().cart;
+    console.log(meteors);
     var data = {
       "products": cart.products,
       "choosenGifts": cart.choosenGifts,
       "priceTotalCart": cart.priceTotalCart,
-      "birthday": cart.birthdayCurrently == C.BIRTHDAY_ON
+      "birthday": cart.birthdayCurrently == C.BIRTHDAY_ON,
+      "paymentType": paymentType,
+      "user": getState().user.uid || "anonim",
+      meteors
     };
 
     const url = 'http://localhost:5000/meteor-764bf/us-central1/checkOrder';
