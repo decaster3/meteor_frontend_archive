@@ -23,10 +23,13 @@ class ShoppingCartContainer extends Component {
   constructor(props){
     super(props)
     this.state = {
-      step: 1,
-      stepView: true
+      step: -1,
+      stepView: true,
+      paymentType: "cash",
+      meteors: 0
     }
     this.setGiftProductsView = this.setGiftProductsView.bind(this)
+    this.handleMeteorsChange = this.handleMeteorsChange.bind(this)
   }
 
   componentDidMount(){
@@ -45,6 +48,11 @@ class ShoppingCartContainer extends Component {
         step: stepFir
       })
     })
+  }
+
+  handleMeteorsChange(event) {
+    var meteors = event.target.value;
+    this.setState({meteors});
   }
 
   changePromotionView(){
@@ -79,7 +87,7 @@ class ShoppingCartContainer extends Component {
               cart = {p.cart}
               cartElements = {cartElements} />
 
-            {s.step != 1?
+            {s.step != -1?
               (p.cart.priceTotalCart > s.step?
                 <PromoCartContainer
                   cart = {p.cart}
@@ -96,7 +104,18 @@ class ShoppingCartContainer extends Component {
                 Loading
               </div>
             }
-            <button onClick={() => p.makeOrder()}>Submit</button>
+            <p>Способ оплаты:</p>
+            <div>
+              <input type="radio" value={"cash"} checked={this.state.paymentType == "cash"} onChange={() => {this.setState({paymentType: "cash"})}} />
+              Наличные
+            </div>
+            <div>
+              <input type="radio" value={"card"} checked={this.state.paymentType == "card"} onChange={() => {this.setState({paymentType: "card"})}} />
+              Карта
+            </div>
+            <p>Метеоры: </p>
+            <input type="number" value={this.state.meteors} min="0" onChange={this.handleMeteorsChange} />
+            <button onClick={() => p.makeOrder(this.state.paymentType, this.state.meteors)}>Submit</button>
           </div>
         )
       }
