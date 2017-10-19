@@ -8,6 +8,7 @@ import PromoCartContainer from './promo_cart_container.js'
 import * as firebase from 'firebase';
 
 import {
+  makeOrder,
   validateTime,
   addGiftProductToCart,
   removeGiftProductFromCart,
@@ -77,6 +78,7 @@ class ShoppingCartContainer extends Component {
               birthdayDiscountOn = {p.birthdayDiscountOn}
               cart = {p.cart}
               cartElements = {cartElements} />
+
             {s.step != 1?
               (p.cart.priceTotalCart > s.step?
                 <PromoCartContainer
@@ -88,11 +90,13 @@ class ShoppingCartContainer extends Component {
               <div>
                 Наберите блюд на сумму {s.step} и получите блюдо в подарок!
               </div>)
+
             :
               <div>
                 Loading
               </div>
             }
+            <button onClick={() => p.makeOrder()}>Submit</button>
           </div>
         )
       }
@@ -122,7 +126,8 @@ function mapDispatchToProps(dispatch){
       birthdayDiscountOff: birthdayDiscountOff,
       addProductToCart: addProductToCart,
       createCart: createCart,
-      removeProductFromCart:removeProductFromCart,
+      removeProductFromCart: removeProductFromCart,
+      makeOrder: makeOrder,
       setGiftProducts: setGiftProducts
     },
     dispatch

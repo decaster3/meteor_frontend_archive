@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 let C = require("../../constants/cart/cart.js")
 let cookies = new Cookies();
 var moment = require('moment');
+import * as axios from 'axios';
 
 export function addProductToCart(product,quantity){
   var current_cart = cookies.get('cart')
@@ -24,7 +25,7 @@ export function addProductToCart(product,quantity){
         }
 
       }
-
+      console.log("action: " + product.category);
       cookies.set('cart', {
         quantityproducts: current_cart.quantityproducts + 1,
         products: [...current_cart.products,{
@@ -33,6 +34,7 @@ export function addProductToCart(product,quantity){
           priceTotalProduct: getTotalPriceOfProduct(product),
           name: product.name,
           img: product.img,
+          category: product.category,
           description: product.description,
           weight: product.weight,
           radius: product.radius,
@@ -88,8 +90,10 @@ export function setGiftProducts(){
     var giftProducts = []
     giftProductsRef.once('value')
       .then(function(snapshot){
-        snapshot.forEach(function(gp){
-          giftProducts.push(gp.val())
+        snapshot.forEach(function(gp) {
+          var product = gp.val();
+          product["id"] = gp.key;
+          giftProducts.push(product);
         })
       }
     ).then( () => {
@@ -118,6 +122,28 @@ export function validateTime(){
     })
 }
 
+export function makeOrder() {
+  return function(dispatch,getState) {
+    var cart = getState().cart;
+    var data = {
+      "products": cart.products,
+      "choosenGifts": cart.choosenGifts,
+      "priceTotalCart": cart.priceTotalCart,
+      "birthday": cart.birthdayCurrently == C.BIRTHDAY_ON
+    };
+
+    const url = 'http://localhost:5000/meteor-764bf/us-central1/checkOrder';
+    console.log(data);
+    axios.post(url, data)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+}
+
 export function validateCart(cart, dispatch){
   var stepFir = 0
   let stepRef = firebase.database().ref().child('products_for_promotion')
@@ -144,9 +170,7 @@ export function validateCart(cart, dispatch){
       }
     })
 }
-export function makeOrder(){
 
-}
 
 export function addGiftProductToCart(product){
     return function(dispatch,getState){

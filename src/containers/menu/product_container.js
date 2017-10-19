@@ -40,7 +40,7 @@ class Product extends Component {
       price += topping.price * topping.count;
     });
 
-    price += this.state.currentSize.price;
+    price += this.state.currentSize.price || this.props.product.price;
 
     return price * this.state.productCount;
   }
@@ -56,10 +56,10 @@ class Product extends Component {
     })
 
     product["radius"] = self.state.currentSize.radius;
-    product["price"] = self.state.currentSize.price;
+    product["price"] = self.state.currentSize.price || self.props.product.price;
     product["weight"] = self.state.currentSize.weight;
     product["toppings"] = toppings || [];
-
+    console.log(product);
     self.props.addProductToCart(product);
   }
 
