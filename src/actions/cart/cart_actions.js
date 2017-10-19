@@ -76,6 +76,14 @@ export function birthdayDiscountOn(){
     validateCart(getState().cart, dispatch)
   }
 }
+export function changeMeteors(meteors){
+  console.log(123);
+  return function(dispatch, getState){
+    dispatch({type: C.CHANGE_METEORS, cart: cookies.get('cart'), meteors: meteors})
+    dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
+    validateCart(getState().cart, dispatch)
+  }
+}
 export function birthdayDiscountOff(){
   return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_OFF, cart: cookies.get('cart')})

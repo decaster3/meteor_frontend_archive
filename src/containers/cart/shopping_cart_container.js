@@ -8,6 +8,7 @@ import PromoCartContainer from './promo_cart_container.js'
 import * as firebase from 'firebase';
 
 import {
+  changeMeteors,
   makeOrder,
   validateTime,
   addGiftProductToCart,
@@ -53,6 +54,7 @@ class ShoppingCartContainer extends Component {
   handleMeteorsChange(event) {
     var meteors = event.target.value;
     this.setState({meteors});
+    this.props.changeMeteors(meteors)
   }
 
   changePromotionView(){
@@ -114,7 +116,7 @@ class ShoppingCartContainer extends Component {
               Карта
             </div>
             <p>Метеоры: </p>
-            <input type="number" value={this.state.meteors} min="0" onChange={this.handleMeteorsChange} />
+            <input type="text" value={this.state.meteors} onChange={this.handleMeteorsChange} />
             <button onClick={() => p.makeOrder(this.state.paymentType, this.state.meteors)}>Submit</button>
           </div>
         )
@@ -139,6 +141,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return bindActionCreators(
     {
+      changeMeteors: changeMeteors,
       validateTime: validateTime,
       addGiftProductToCart: addGiftProductToCart,
       removeGiftProductFromCart: removeGiftProductFromCart,

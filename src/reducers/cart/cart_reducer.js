@@ -60,6 +60,11 @@ module.exports = function(currentstate = initialState , action){
         ...currentstate,
         timeValidation: action.timeValidation
       }
+    case C.CHANGE_METEORS:
+      return {
+        ...currentstate,
+        priceTotalCart: getCartTotal(action.cart) - action.meteors
+      }
     default: return currentstate;
   }
 }
