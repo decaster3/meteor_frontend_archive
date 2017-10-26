@@ -9,7 +9,8 @@ export default class AddAddressComponent extends Component {
       street:'',
       flat:'',
       building:'',
-      comments:''
+      comments:'',
+      nameOfAddress:''
     }
     this.handleChange = this.handleChange.bind(this);
   }
@@ -26,6 +27,10 @@ export default class AddAddressComponent extends Component {
     let s = this.state
     return (
       <div>
+        <label>
+          Name of Address:
+          <input name = "nameOfAddress" type = "nameOfAddress" defaultValue = {s.nameOfAddress} onChange = {this.handleChange}/>
+        </label>
         <label>
           Country:
           <input name = "country" type = "country" defaultValue = {s.country} onChange = {this.handleChange}/>
@@ -47,7 +52,7 @@ export default class AddAddressComponent extends Component {
           <input name = "comments" type = "comments" defaultValue = {s.comments} onChange = {this.handleChange}/>
         </label>
         <button onClick = {() => p.changeAddressChanging()}>Cancel</button>
-        <button onClick = {() => {p.addAddress(s.country, s.city, s.flat, s.building, s.comments, p.changeAddressChanging)}}>Save</button>
+        <button onClick = {() => {p.addAddress(s.country, s.city, s.flat, s.building, s.comments, s.nameOfAddress, p.changeAddressChanging)}}>Save</button>
       </div>
     )
   }

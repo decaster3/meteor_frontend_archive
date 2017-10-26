@@ -331,7 +331,7 @@ export function changePassword(password) {
   }
 }
 
-export function addAddress(country, city, flat, building, comments, func){
+export function addAddress(country, city, flat, building, comments, nameOfAddress, func){
   let authRef = firebase.database().ref().child('users')
   var user = firebase.auth().currentUser
   return function(dispatch){
@@ -342,7 +342,8 @@ export function addAddress(country, city, flat, building, comments, func){
             city: city,
             flat: flat,
             building: building,
-            comments: comments
+            comments: comments,
+            nameOfAddress: nameOfAddress
           })
       }).then(() =>
       {dispatch({type: C.FIELD_CHANGING, changing: C.NOTHING_CHANGES})

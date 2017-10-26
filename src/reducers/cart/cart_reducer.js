@@ -7,7 +7,7 @@ module.exports = function(currentstate = initialState , action){
       return {
         ...currentstate,
         currently: C.CART_EXIST,
-        priceTotalCart: getCartTotal(action.cart),
+        priceTotalCart: getCartTotal(action.cart) - currentstate.meteors_choosen,
         products_quantity: action.cart.quantityproducts,
         products: action.cart.products,
       };
@@ -15,13 +15,13 @@ module.exports = function(currentstate = initialState , action){
       return {
         ...currentstate,
         birthdayCurrently: C.BIRTHDAY_ON,
-        priceTotalCart: Math.round(getCartTotal(action.cart) * 0.75),
+        priceTotalCart: Math.round(getCartTotal(action.cart) * 0.75) - currentstate.meteors_choosen,
       }
     case C.BIRTHDAY_DICOUNT_OFF:
       return {
         ...currentstate,
         birthdayCurrently: C.BIRTHDAY_OFF,
-        priceTotalCart: getCartTotal(action.cart),
+        priceTotalCart: getCartTotal(action.cart) - currentstate.meteors_choosen,
       }
     case C.LOADING_GIFT_PRODUCTS:
       return {
@@ -61,17 +61,21 @@ module.exports = function(currentstate = initialState , action){
         timeValidation: action.timeValidation
       }
     case C.CHANGE_METEORS:
+    console.log(action.a);
       return {
         ...currentstate,
-        priceTotalCart: getCartTotal(action.cart) - action.meteors
+        meteors_choosen: action.meteors,
+        priceTotalCart: action.a? Math.round(action.totalPrice * 0.75) : action.totalPrice
       }
     default: return currentstate;
   }
 }
-function getCartTotal(cart){
+
+export function getCartTotal(cart){
   var count = 0
   for(let i = 0; i < cart.quantityproducts; i++){
       count += cart.products[i].priceTotalProduct * cart.products[i].quantity
   }
+  console.log("frist " +count);
   return count
 }

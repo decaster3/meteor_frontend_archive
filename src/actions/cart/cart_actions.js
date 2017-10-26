@@ -55,7 +55,7 @@ export function addProductToCart(product,quantity){
 };
 
 export function createCart(){
-  return function(dispatch){
+  return function(dispatch, getState){
     if (cookies.get('cart') == undefined){
       cookies.set('cart', {
         quantityproducts: 0,
@@ -67,8 +67,9 @@ export function createCart(){
       var current_cart = cookies.get('cart')
       dispatch({type: C.UPDATE_CART, cart: cookies.get('cart')})
     }
+    validateCart(getState().cart, dispatch)
   }
-};
+}
 export function birthdayDiscountOn(){
   return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_ON, cart: cookies.get('cart')})
@@ -77,13 +78,34 @@ export function birthdayDiscountOn(){
   }
 }
 export function changeMeteors(meteors){
-  console.log(123);
   return function(dispatch, getState){
-    dispatch({type: C.CHANGE_METEORS, cart: cookies.get('cart'), meteors: meteors})
+    var a = false
+    console.log(getState().cart.birthdayCurrently);
+    if (getState().cart.birthdayCurrently == C.BIRTHDAY_ON){
+      a = true
+    }
     dispatch({type: C.CHOOSE_GIFT, choosenGifts: []})
-    validateCart(getState().cart, dispatch)
+    var totalPriceCartM = getCartTotalM(cookies.get('cart')) - meteors
+    if ((totalPriceCartM) > 2500){
+      dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CAN_MAKE_ORDER})
+      dispatch({type: C.CHANGE_METEORS, totalPrice: totalPriceCartM, meteors: parseInt(meteors), a: a})
+    }
+    else {
+      dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CANT_MAKE_ORDER})
+      dispatch({type: C.CHANGE_METEORS, totalPrice: totalPriceCartM, meteors: parseInt(meteors), a: a})
+    }
+    validateCart(getState().cart, dispatch, false)
   }
 }
+
+export function getCartTotalM(cart){
+  var count = 0
+  for(let i = 0; i < cart.quantityproducts; i++){
+      count += cart.products[i].priceTotalProduct * cart.products[i].quantity
+  }
+  return count
+}
+
 export function birthdayDiscountOff(){
   return function(dispatch, getState){
     dispatch({type: C.BIRTHDAY_DICOUNT_OFF, cart: cookies.get('cart')})
@@ -138,7 +160,6 @@ export function validateTime() {
 export function makeOrder(paymentType, meteors) {
   return function(dispatch, getState) {
     var cart = getState().cart;
-    console.log(meteors);
     var data = {
       "products": cart.products,
       "choosenGifts": cart.choosenGifts,
@@ -150,7 +171,6 @@ export function makeOrder(paymentType, meteors) {
     };
 
     const url = 'http://localhost:5000/meteor-764bf/us-central1/checkOrder';
-    console.log(data);
     axios.post(url, data)
       .then(function (response) {
         console.log(response.data);
@@ -161,7 +181,7 @@ export function makeOrder(paymentType, meteors) {
   }
 }
 
-export function validateCart(cart, dispatch){
+export function validateCart(cart, dispatch, totalCart = true){
   var stepFir = 0
   let stepRef = firebase.database().ref().child('products_for_promotion')
     stepRef.once('value')
@@ -178,15 +198,19 @@ export function validateCart(cart, dispatch){
           dispatch({type: C.VALIDATE_GIFTS, validationGiftsCurrently: C.ONE_MORE_GIFT})
         }
       }
-      // TODO:
-      if (cart.priceTotalCart > 2500){
-        dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CAN_MAKE_ORDER})
-      }
-      else {
-        dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CANT_MAKE_ORDER})
-      }
-    })
+        if(totalCart){
+          if (cart.priceTotalCart > 2500){
+            dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CAN_MAKE_ORDER})
+            return
+          }
+          else {
+            dispatch({type: C.VALIDATE_TOTAL_CART, order_possibility: C.CANT_MAKE_ORDER})
+            return
+          }
+        }
+      })
 }
+
 
 
 export function addGiftProductToCart(product){
@@ -209,7 +233,6 @@ export function removeGiftProductFromCart(product){
         let currentGifts = getState().cart.choosenGifts.slice(0)
         for (var i = 0; i < currentGifts.length; i++){
           if (currentGifts[i].name == product.name){
-            console.log(currentGifts[i].name);
             currentGifts.splice(i,1)
           }
         }

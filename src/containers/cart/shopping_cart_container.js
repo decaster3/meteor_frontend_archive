@@ -3,13 +3,14 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ProductsExistComponent from '../../components/shopping_cart_page/products_exist_component'
 import EmptyCartComponent from '../../components/shopping_cart_page/empty_cart_component'
-import Addresses from '../../components/shopping_cart_page/addresses'
+import MeteorSelectionComponent from '../../components/shopping_cart_page/meteor_selection_component'
+import CheckoutButtonComponent from '../../components/shopping_cart_page/checkout_button_component'
 import PromoCartContainer from './promo_cart_container.js'
+import CheckoutContainer from '../checkout/checkout_container'
 import * as firebase from 'firebase';
 
 import {
   changeMeteors,
-  makeOrder,
   validateTime,
   addGiftProductToCart,
   removeGiftProductFromCart,
@@ -25,17 +26,16 @@ class ShoppingCartContainer extends Component {
     super(props)
     this.state = {
       step: -1,
-      stepView: true,
-      paymentType: "cash",
-      meteors: 0
+      meteors: 0,
+      checkout: false
     }
     this.setGiftProductsView = this.setGiftProductsView.bind(this)
-    this.handleMeteorsChange = this.handleMeteorsChange.bind(this)
+    this.handleChangeMeteors = this.handleChangeMeteors.bind(this)
+    this.goToCheckout = this.goToCheckout.bind(this)
   }
 
   componentDidMount(){
     this.props.createCart()
-    //короче вот эта функция setGiftProducts() все ломает по циферкам иди
     this.props.setGiftProducts()
     this.props.validateTime()
     var stepFir = 0
@@ -49,18 +49,21 @@ class ShoppingCartContainer extends Component {
         step: stepFir
       })
     })
-  }
-
-  handleMeteorsChange(event) {
-    var meteors = event.target.value;
-    this.setState({meteors});
-    this.props.changeMeteors(meteors)
-  }
-
-  changePromotionView(){
     this.setState({
-      stepView: !this.state.stepView
+      meteors: this.props.cart.meteors_choosen
     })
+  }
+
+  goToCheckout(){
+    var a = this.state.checkout
+    this.setState({
+      checkout: !a
+    });
+  }
+
+  handleChangeMeteors(event) {
+    this.setState({meteors: event.target.value});
+    this.props.changeMeteors(event.target.value)
   }
 
   setGiftProductsView(){
@@ -71,6 +74,7 @@ class ShoppingCartContainer extends Component {
     let s = this.state
     var products = p.cart.products
     var cartElements = <div>LOADING</div>
+    if (!s.checkout){
     if (p.cart.products){
         cartElements = products.map((product, index) =>
         <div key = {index}>
@@ -106,18 +110,19 @@ class ShoppingCartContainer extends Component {
                 Loading
               </div>
             }
-            <p>Способ оплаты:</p>
-            <div>
-              <input type="radio" value={"cash"} checked={this.state.paymentType == "cash"} onChange={() => {this.setState({paymentType: "cash"})}} />
-              Наличные
-            </div>
-            <div>
-              <input type="radio" value={"card"} checked={this.state.paymentType == "card"} onChange={() => {this.setState({paymentType: "card"})}} />
-              Карта
-            </div>
-            <p>Метеоры: </p>
-            <input type="text" value={this.state.meteors} onChange={this.handleMeteorsChange} />
-            <button onClick={() => p.makeOrder(this.state.paymentType, this.state.meteors)}>Submit</button>
+            {//проверка метеоров у человека и вообще зареган ли
+
+            }
+            <MeteorSelectionComponent
+              choosenMeteors = {s.meteors}
+              totalCart = {p.cart.priceTotalCart}
+              choosenMeteors = {s.meteors}
+              handleChangeMeteors = {this.handleChangeMeteors}/>
+
+            <CheckoutButtonComponent
+              order_possibility = {p.cart.order_possibility}
+              goToCheckout = {this.goToCheckout}/>
+
           </div>
         )
       }
@@ -125,10 +130,15 @@ class ShoppingCartContainer extends Component {
       return (
         <div>
           <EmptyCartComponent />
-          <Addresses addresses={['Казань', 'Казахстан', 'Москва']}/>
         </div>
 
       )
+    } else {
+      return (
+        <CheckoutContainer
+          goToCheckout = {this.goToCheckout}/>
+      )
+    }
 	}
 }
 
@@ -150,7 +160,6 @@ function mapDispatchToProps(dispatch){
       addProductToCart: addProductToCart,
       createCart: createCart,
       removeProductFromCart: removeProductFromCart,
-      makeOrder: makeOrder,
       setGiftProducts: setGiftProducts
     },
     dispatch
