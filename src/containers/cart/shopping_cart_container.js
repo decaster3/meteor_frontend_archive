@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ProductsExistComponent from '../../components/shopping_cart_page/products_exist_component'
 import EmptyCartComponent from '../../components/shopping_cart_page/empty_cart_component'
-import Addresses from '../../components/shopping_cart_page/addresses'
+import AddressContainer from './address_container'
 import PromoCartContainer from './promo_cart_container.js'
 import * as firebase from 'firebase';
 
@@ -117,6 +117,7 @@ class ShoppingCartContainer extends Component {
             </div>
             <p>Метеоры: </p>
             <input type="text" value={this.state.meteors} onChange={this.handleMeteorsChange} />
+            <AddressContainer/>
             <button onClick={() => p.makeOrder(this.state.paymentType, this.state.meteors)}>Submit</button>
           </div>
         )
@@ -125,7 +126,7 @@ class ShoppingCartContainer extends Component {
       return (
         <div>
           <EmptyCartComponent />
-          <Addresses addresses={['Казань', 'Казахстан', 'Москва']}/>
+
         </div>
 
       )

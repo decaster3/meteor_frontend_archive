@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../../assets/css/address.css';
 
 export default class Addresses extends Component {
   constructor(props) {
@@ -6,10 +7,11 @@ export default class Addresses extends Component {
 
     this.state = {
       addresses: this.props.addresses,
-      listShowed: false,
       showedAddresses: this.props.addresses,
       typedAddress: '',
-      unknownStreet: false
+      choosenAddress: this.props.addresses[0],
+      unknownStreet: false,
+      addressDropdownShown: false
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -27,7 +29,7 @@ export default class Addresses extends Component {
   }
 
   setValue(address) {
-    this.setState({typedAddress: address, listShowed: false})
+    this.setState({choosenAddress: address, addressDropdownShown: false})
   }
 
   handleChange(event) {
@@ -36,35 +38,43 @@ export default class Addresses extends Component {
     var showedAddresses = this.filterAddresses(typedAddress);
 
     if (showedAddresses.length == 0)
-      this.setState({typedAddress, listShowed: true, unknownStreet: true, showedAddresses});
+      this.setState({typedAddress, unknownStreet: true, showedAddresses});
     else
-      this.setState({typedAddress, listShowed: true, unknownStreet: false, showedAddresses});
+      this.setState({typedAddress, unknownStreet: false, showedAddresses});
 
 
   }
 
 
   render() {
-    var error = null;
-    var addresses = null;
+    var dropdown = null;
+    if (this.state.addressDropdownShown) {
 
-    if (this.state.unknownStreet)
-      error = <p>Неизвестная улица!</p>
+      var error = null;
+      var addresses = null;
 
-    if (this.state.listShowed) {
-      var showedAddresses = this.state.showedAddresses;
-      addresses = <ul>
-        {showedAddresses.map((address, index) => {
-          return <li key={index} onClick={() => this.setValue(address)}>{address}</li>
-        })}
-      </ul>
+      if (this.state.unknownStreet)
+        error = <p>Неизвестная улица!</p>
+      else
+        addresses = <ul className="address">
+          {this.state.showedAddresses.map((address, index) => {
+            return <li key={index} onClick={() => this.setValue(address)}>{address}</li>
+          })}
+        </ul>
+
+      dropdown = (<div >
+        <input type="text" value={this.state.typedAddress} onChange={this.handleChange} />
+        {addresses}
+        {error}
+        </div>
+      );
     }
 
     return (
       <div>
-        <input type="text" value={this.state.typedAddress} onChange={this.handleChange} onClick={() => {this.setState({listShowed: !this.state.listShowed})}}/>
-        {addresses}
-        {error}
+        <p>Улица:</p>
+        <p onClick={() => {this.setState({addressDropdownShown: !this.state.addressDropdownShown})}}>{this.state.choosenAddress}</p>
+        {dropdown}
       </div>
     )
 	}

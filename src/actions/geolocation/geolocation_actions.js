@@ -18,9 +18,9 @@ export function getLocation() {
          location_type: ['ROOFTOP', 'APPROXIMATE']
       }, (err, response) => {
 
-        if (!err) {
-          var location = response.json.results[0].formatted_address;
-          console.log(location);
+        if (!err && response.json.status != "ZERO_RESULTS") {
+          var location = response.json.results[0].formatted_address.split(",")[0];
+
           if (!getState().geolocation.legalLocations.includes(location))
             location = getState().geolocation.defaultLocation;
           dispatch(checkUserLocation(location));
