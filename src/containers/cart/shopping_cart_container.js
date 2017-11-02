@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ProductsExistComponent from '../../components/shopping_cart_page/products_exist_component'
 import EmptyCartComponent from '../../components/shopping_cart_page/empty_cart_component'
+import TimePickerR from '../../components/shopping_cart_page/time_picker'
+import Geolocation from '../../components/geolocation/Geolocation'
 import AddressContainer from './address_container'
 import PromoCartContainer from './promo_cart_container.js'
 import * as firebase from 'firebase';
@@ -83,6 +85,7 @@ class ShoppingCartContainer extends Component {
       if(products.length > 0){
         return (
           <div>
+            <Geolocation/>
             <ProductsExistComponent
               birthdayDiscountOff = {p.birthdayDiscountOff}
               birthdayDiscountOn = {p.birthdayDiscountOn}
@@ -118,6 +121,7 @@ class ShoppingCartContainer extends Component {
             <p>Метеоры: </p>
             <input type="text" value={this.state.meteors} onChange={this.handleMeteorsChange} />
             <AddressContainer/>
+            <TimePickerR/>
             <button onClick={() => p.makeOrder(this.state.paymentType, this.state.meteors)}>Submit</button>
           </div>
         )

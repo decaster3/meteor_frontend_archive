@@ -9,14 +9,14 @@ export default class Addresses extends Component {
       addresses: this.props.addresses,
       showedAddresses: this.props.addresses,
       typedAddress: '',
-      choosenAddress: this.props.addresses[0],
+      choosenAddress: this.props.address,
       unknownStreet: false,
       addressDropdownShown: false
     }
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleAddressChange = this.handleAddressChange.bind(this);
     this.filterAddresses = this.filterAddresses.bind(this);
-    this.setValue = this.setValue.bind(this);
+    this.setAddress = this.setAddress.bind(this);
 
   }
 
@@ -28,11 +28,12 @@ export default class Addresses extends Component {
     })
   }
 
-  setValue(address) {
-    this.setState({choosenAddress: address, addressDropdownShown: false})
+  setAddress(address) {
+    this.props.setAddress(address)
+    this.setState({addressDropdownShown: false})
   }
 
-  handleChange(event) {
+  handleAddressChange(event) {
     var typedAddress = event.target.value;
 
     var showedAddresses = this.filterAddresses(typedAddress);
@@ -41,10 +42,7 @@ export default class Addresses extends Component {
       this.setState({typedAddress, unknownStreet: true, showedAddresses});
     else
       this.setState({typedAddress, unknownStreet: false, showedAddresses});
-
-
   }
-
 
   render() {
     var dropdown = null;
@@ -58,23 +56,27 @@ export default class Addresses extends Component {
       else
         addresses = <ul className="address">
           {this.state.showedAddresses.map((address, index) => {
-            return <li key={index} onClick={() => this.setValue(address)}>{address}</li>
+            return <li key={index} onClick={() => this.setAddress(address)}>{address}</li>
           })}
         </ul>
 
       dropdown = (<div >
-        <input type="text" value={this.state.typedAddress} onChange={this.handleChange} />
+        <input type="text" value={this.state.typedAddress} onChange={this.handleAddressChange} />
         {addresses}
         {error}
         </div>
       );
     }
-
     return (
       <div>
         <p>Улица:</p>
-        <p onClick={() => {this.setState({addressDropdownShown: !this.state.addressDropdownShown})}}>{this.state.choosenAddress}</p>
+        <p onClick={() => {this.setState({addressDropdownShown: !this.state.addressDropdownShown})}}>{this.props.location.address}</p>
         {dropdown}
+        <p>Дом:</p>
+        <input type="text" value={this.props.location.home} onChange={(event) => {this.props.setHouse(event.target.value)}} />
+        <p>Квартира:</p>
+        <input type="number" value={(this.props.location.flat)} onChange={(event) => {this.props.setFlat(event.target.value)}} />
+
       </div>
     )
 	}

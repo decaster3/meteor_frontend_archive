@@ -15,10 +15,9 @@ class Geolocation extends Component {
     this.props.initLocation();
   }
 
-
   render () {
-    const {locationState} = this.props.geolocation;
-    const {location} = this.props.geolocation;
+    const { locationState } = this.props.geolocation;
+    const location = this.props.geolocation.city;
 
     switch (locationState) {
       case C.DETERMINED:
@@ -27,13 +26,14 @@ class Geolocation extends Component {
 
       case C.NOT_DETERMINE:
         var currentLocation = <p>Текущий город {location}?
-          <span onClick={() => this.props.setChaingingState()}>Если нет нажмите!</span>
+          <span onClick={() => this.props.setChaingingState()}> Если нет нажмите!</span>
         </p>;
         return <div>{currentLocation}</div>;
 
       case C.CHANGING:
-        const countries = this.props.geolocation.legalLocations.map((location, index) => {
-            return <p key={index} onClick={() => this.props.setLocation(location)} >{location}</p>
+        let locations = this.props.geolocation.legalLocations;
+        let countries = Object.keys(countries).map((city, index) => {
+            return <p key={index} onClick={() => this.props.setLocation({city, "country": locations[city]})} >{location}</p>
         });
 
         var cityPicker = (<div>
