@@ -2,7 +2,11 @@ let C = require("../../constants/geolocation/geolocation.js");
 
 module.exports = {
   locationState: C.NOT_INIT,
-  location: null,
+  city: null,
+  country: null,
   defaultLocation: "",
-  legalLocations: []
+  legalLocations: [],
+  address: "",
+  house: "",
+  flat: ""
 }

@@ -18,10 +18,23 @@ export function getLocation() {
          location_type: ['ROOFTOP', 'APPROXIMATE']
       }, (err, response) => {
 
-        if (!err) {
-          var location = response.json.results[0].formatted_address;
-          console.log(location);
-          if (!getState().geolocation.legalLocations.includes(location))
+        if (!err && response.json.status != "ZERO_RESULTS") {
+
+          var city = null;
+          var country = null;
+
+          response.json.results[0].address_components.map(result => {
+            if (result.types.includes("locality")) {
+              city = result.long_name;
+            }
+            if (result.types.includes("country")) {
+              country = result.long_name;
+            }
+          });
+
+          var location = {city, country};
+        
+          if (getState().geolocation.legalLocations[city] != country)
             location = getState().geolocation.defaultLocation;
           dispatch(checkUserLocation(location));
         }
@@ -36,12 +49,12 @@ export function getLocation() {
 }
 
 //TODO add to auth state changer
-export function checkUserLocation(default_country = null) {
+export function checkUserLocation(location = null) {
   return function(dispatch, getState){
 
-    if (!default_country){
-      default_country = getState().geolocation.location;
-      if (!default_country)
+    if (!location) {
+      location = { "city": getState().geolocation.city, "country": getState().geolocation.country };
+      if (!location)
         return;
     }
 
@@ -49,26 +62,23 @@ export function checkUserLocation(default_country = null) {
     var locationState = C.NOT_DETERMINE;
 
     if (user.currently == AUTH.SIGNED_IN) {
+      var city = user.default_city;
+      var country = user.default_country;
+      var userLocation = { city, country };
 
-      var userCountry = user.default_country;
+      if (!city || !country)
+        changeUserDefaultLocation(location);
 
-      if (!userCountry)
-        changeUserCountry(default_country);
-
-      if (userCountry == default_country)
+      if (userLocation == location)
         locationState = C.DETERMINED
     }
+
     dispatch({
       type: C.SEND_LOCATION,
-      location: default_country,
+      city: location.city,
+      country: location.country,
       locationState
     });
-  }
-}
-
-export function setChaingingState() {
-  return {
-    type: C.CHANGING
   }
 }
 
@@ -77,29 +87,31 @@ export function setLocation(location) {
     var user = getState().user;
 
     if (user.currently == AUTH.SIGNED_IN) {
-      changeUserCountry(location);
+      changeUserDefaultLocation(location);
     }
 
     dispatch({
       type: C.SEND_LOCATION,
-      location,
+      city: location.city,
+      country: location.country,
       locationState: C.DETERMINED
     });
-
   }
 }
 
-export function changeUserCountry(default_country){
+export function changeUserDefaultLocation(location){
   var user = firebase.auth().currentUser;
-  var {uid} = user;
-  firebase.database().ref().child('users').child(uid).child("default_country").set(default_country);
+  var { uid } = user;
+  firebase.database().ref().child('users').child(uid).child("default_country").set(location.country);
+  firebase.database().ref().child('users').child(uid).child("default_city").set(location.city);
 }
 
 export function initLocation() {
   return function(dispatch,getState){
       firebase.database().ref().child('locations').once('value', snapshot => {
         var legalLocations = snapshot.val();
-        var defaultLocation = legalLocations[0];
+        var city = Object.keys(legalLocations)[0];
+        var defaultLocation = { city, "country": legalLocations[city] };
 
         dispatch({
           type: C.INIT,
@@ -108,5 +120,32 @@ export function initLocation() {
         });
         dispatch(getLocation());
       })
+  }
+}
+
+export function setAddress(address) {
+  return {
+      type: C.SET_ADDRESS,
+      address
+  }
+}
+
+export function setHouse(house) {
+  return {
+      type: C.SET_HOUSE,
+      house
+  }
+}
+
+export function setFlat(flat) {
+  return {
+      type: C.SET_FLAT,
+      flat
+  }
+}
+
+export function setChaingingState() {
+  return {
+    type: C.CHANGING
   }
 }
