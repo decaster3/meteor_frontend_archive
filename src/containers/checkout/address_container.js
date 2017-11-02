@@ -11,12 +11,19 @@ class AddressContainer extends Component {
     this.state = {
       addresses: []
     }
+
+    this.loadAddresses = this.loadAddresses.bind(this)
   }
-  componentWillReceiveProps(nextProps){
-    var city = nextProps.geolocation.city;
+
+  componentDidMount(){
+    var city = this.props.geolocation.city;
     if (!city || this.state.addresses.length != 0)
       return
 
+    this.loadAddresses(city);
+  }
+
+  loadAddresses(city){
     var addresses = [];
 
     firebase.database().ref().child('streets').child(city).once('value').then(function (snapshot) {
@@ -27,12 +34,21 @@ class AddressContainer extends Component {
 
       this.props.setAddress(addresses[0]);
       this.setState({addresses});
-    })
+    });
+  }
+
+  componentWillReceiveProps(nextProps){
+    var city = nextProps.geolocation.city;
+    if (!city || this.state.addresses.length != 0)
+      return
+
+    this.loadAddresses(city);
   }
 
   render() {
+    console.log(123);
     if (this.state.addresses.length == 0)
-      return <p>Поиск</p>
+      return (<p>Поиск</p>)
     return <Addresses addresses={this.state.addresses} location={this.props.geolocation} setAddress={this.props.setAddress} setHouse={this.props.setHouse} setFlat={this.props.setFlat}/>
   }
 }

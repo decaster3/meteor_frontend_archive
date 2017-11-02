@@ -3,14 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ProductsExistComponent from '../../components/shopping_cart_page/products_exist_component'
 import EmptyCartComponent from '../../components/shopping_cart_page/empty_cart_component'
-<<<<<<< HEAD
 import MeteorSelectionComponent from '../../components/shopping_cart_page/meteor_selection_component'
 import CheckoutButtonComponent from '../../components/shopping_cart_page/checkout_button_component'
-=======
 import TimePickerR from '../../components/shopping_cart_page/time_picker'
-import Geolocation from '../../components/geolocation/Geolocation'
-import AddressContainer from './address_container'
->>>>>>> d2dab334f6c388d2c6d3b15754d7b2ef0a3bfe41
 import PromoCartContainer from './promo_cart_container.js'
 import CheckoutContainer from '../checkout/checkout_container'
 import * as firebase from 'firebase';
@@ -93,7 +88,6 @@ class ShoppingCartContainer extends Component {
       if(products.length > 0){
         return (
           <div>
-            <Geolocation/>
             <ProductsExistComponent
               birthdayDiscountOff = {p.birthdayDiscountOff}
               birthdayDiscountOn = {p.birthdayDiscountOn}
@@ -117,7 +111,6 @@ class ShoppingCartContainer extends Component {
                 Loading
               </div>
             }
-<<<<<<< HEAD
             {//проверка метеоров у человека и вообще зареган ли
 
             }
@@ -130,23 +123,6 @@ class ShoppingCartContainer extends Component {
             <CheckoutButtonComponent
               order_possibility = {p.cart.order_possibility}
               goToCheckout = {this.goToCheckout}/>
-
-=======
-            <p>Способ оплаты:</p>
-            <div>
-              <input type="radio" value={"cash"} checked={this.state.paymentType == "cash"} onChange={() => {this.setState({paymentType: "cash"})}} />
-              Наличные
-            </div>
-            <div>
-              <input type="radio" value={"card"} checked={this.state.paymentType == "card"} onChange={() => {this.setState({paymentType: "card"})}} />
-              Карта
-            </div>
-            <p>Метеоры: </p>
-            <input type="text" value={this.state.meteors} onChange={this.handleMeteorsChange} />
-            <AddressContainer/>
-            <TimePickerR/>
-            <button onClick={() => p.makeOrder(this.state.paymentType, this.state.meteors)}>Submit</button>
->>>>>>> d2dab334f6c388d2c6d3b15754d7b2ef0a3bfe41
           </div>
         )
       }
@@ -154,10 +130,6 @@ class ShoppingCartContainer extends Component {
       return (
         <div>
           <EmptyCartComponent />
-<<<<<<< HEAD
-=======
-
->>>>>>> d2dab334f6c388d2c6d3b15754d7b2ef0a3bfe41
         </div>
 
       )

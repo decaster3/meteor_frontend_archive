@@ -23,31 +23,26 @@ class Navbar extends Component {
         </div>);
     }
     return (
-      <header id="header">
-        <div className="navbar">
-        <div className="container">
-          <div className="logo">
+      <header>
+        <div>
+          <Geolocation />
+          <div>
             <Link to='/'>
-              <img src="assets/img/logo.png" className="logo" alt="" />
+              <p>Logo</p>
             </Link>
           </div>
-          <Geolocation/>
-          <div className="menu align-self-bottom">
-            <div className="d-none d-md-block">
+          <div>
+            <div>
               <Link to='/menu'>Меню</Link>
-              <span className="divider">|</span>
+              <span>|</span>
               <Link to='/cart'>Корзина</Link>
-              <span className="divider">|</span>
+              <span>|</span>
               <a href="#">{userNavBar}</a>
-              <span className="divider">|</span>
+              <span>|</span>
               <a href="#">Войти</a>
-            </div>
-            <div className="d-md-none">
-              <i className="fa fa-bars fa-2x" aria-hidden="true" className="menu-toogle"></i>
             </div>
           </div>
         </div>
-      </div>
     </header>)
   }
 }

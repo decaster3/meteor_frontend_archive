@@ -5,6 +5,9 @@ import { makeOrder } from '../../actions/cart/cart_actions'
 import PaymentMethodsComponent from '../../components/checkout/payment_methods_component'
 import DeliveryInfoContainer from './delivery_info_container.js'
 import WorkingTimeContainer from './working_time_container.js'
+import AddressContainer from './address_container'
+
+
 class CheckoutContainer extends React.Component {
   constructor(props){
     super(props)
@@ -32,6 +35,7 @@ class CheckoutContainer extends React.Component {
           choosen_meteors = {p.cart.choosen_meteors}
           makeOrder = {p.makeOrder}
           changePayment = {this.changePayment}/>
+        <AddressContainer/>
 
       </div>
     )

@@ -9,7 +9,8 @@ export function getLocation() {
       const lng = position.coords.longitude;
 
       var googleMapsClient = require('@google/maps').createClient({
-        key: 'AIzaSyDeRt-ekVSI0anD_b1zE5Kl7WobsRGutvc'
+        key: 'AIzaSyDeRt-ekVSI0anD_b1zE5Kl7WobsRGutvc',
+        language: 'ru'
       });
 
       googleMapsClient.reverseGeocode({
@@ -33,7 +34,7 @@ export function getLocation() {
           });
 
           var location = {city, country};
-        
+          console.log(location);
           if (getState().geolocation.legalLocations[city] != country)
             location = getState().geolocation.defaultLocation;
           dispatch(checkUserLocation(location));
