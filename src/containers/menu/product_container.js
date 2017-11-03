@@ -128,6 +128,7 @@ class Product extends Component {
   }
 
   render () {
+    console.log(123);
     var product = this.props.product;
     var price = this.calculatePrice();
     var toppings = product.toppings ? (<Toppings toppings={product.toppings} addTopping={this.addTopping} removeTopping={this.removeTopping} parent={this}/>) : null;

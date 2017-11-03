@@ -5,8 +5,9 @@ import { checkUserLocation } from '../geolocation/geolocation_actions.js'
 	// вызывается при инициализации приложения, затем слушает на изменения
 	export function startListeningToAuth(){
 		return function(dispatch,getState){
+
 			firebase.auth().onAuthStateChanged(function(user) {
-				if (user){
+				if (user) {
 					let authRef = firebase.database().ref().child('users').child(user.uid)
 					//подгрузка данных из базы данных профиля пользователя
 					authRef.update({
@@ -27,6 +28,7 @@ import { checkUserLocation } from '../geolocation/geolocation_actions.js'
 							emailVerified: snapshot.val().emailVerified,
 							username: snapshot.val().username
 						});
+
 						dispatch(checkUserLocation());
 					})
 				} else {

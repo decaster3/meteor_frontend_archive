@@ -9,10 +9,10 @@ module.exports = {
     };
   },
 
-	loadProducts: function(category) {
+	loadProducts: function(city, category) {
 		return function(dispatch, getState) {
 			dispatch({ type: C.LOADING_PRODUCTS });
-			firebase.database().ref().child('products').child(category).once('value', snapshot => {
+			firebase.database().ref().child('products').child(city).child(category).once('value', snapshot => {
 			  var products = [];
 				var sub_categories = [];
 

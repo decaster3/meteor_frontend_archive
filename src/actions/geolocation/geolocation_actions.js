@@ -34,7 +34,6 @@ export function getLocation() {
           });
 
           var location = {city, country};
-          console.log(location);
           if (getState().geolocation.legalLocations[city] != country)
             location = getState().geolocation.defaultLocation;
           dispatch(checkUserLocation(location));
@@ -55,7 +54,7 @@ export function checkUserLocation(location = null) {
 
     if (!location) {
       location = { "city": getState().geolocation.city, "country": getState().geolocation.country };
-      if (!location)
+      if (!location.city || !location.country)
         return;
     }
 
@@ -70,10 +69,10 @@ export function checkUserLocation(location = null) {
       if (!city || !country)
         changeUserDefaultLocation(location);
 
-      if (userLocation == location)
+      if (userLocation.city == location.city)
         locationState = C.DETERMINED
     }
-
+    
     dispatch({
       type: C.SEND_LOCATION,
       city: location.city,

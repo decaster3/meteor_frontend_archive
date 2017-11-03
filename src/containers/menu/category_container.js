@@ -11,10 +11,22 @@ class Categories extends Component {
 
   constructor(props) {
     super(props);
+    this.initCategories = this.initCategories.bind(this);
   }
 
   componentDidMount() {
-    this.props.loadingCategories();
+    this.initCategories(this.props)
+  }
+
+  initCategories(props) {
+    var city = props.geolocation.city;
+    if (city && props.categoryState == C.NOT_LOADED){
+      this.props.loadingCategories(city);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initCategories(nextProps)
   }
 
   render () {
@@ -25,7 +37,7 @@ class Categories extends Component {
     switch (categoryState) {
       case C.LOADED:
         categories = this.props.categories.map((key, index) => {
-          return <img onClick={() => f(key)} id={key} key={index} src="http://2.bp.blogspot.com/-C6KY8tsc8Fw/T-SVFnncxjI/AAAAAAAAANw/FMiNzA8Zecw/s640/mr.bean.jpg" width="100" height="100" />
+          return <img onClick={() => f(this.props.geolocation.city, key)} id={key} key={index} src="http://2.bp.blogspot.com/-C6KY8tsc8Fw/T-SVFnncxjI/AAAAAAAAANw/FMiNzA8Zecw/s640/mr.bean.jpg" width="100" height="100" />
         });
         break;
       case C.LOADING:
@@ -44,7 +56,8 @@ class Categories extends Component {
 function mapStateToProps(state) {
   return {
     categoryState: state.categories.categoryState,
-    categories: state.categories.categories
+    categories: state.categories.categories,
+    geolocation: state.geolocation
   };
 }
 

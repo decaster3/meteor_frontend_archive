@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import SubCategories from './sub_categories';
-import Categories from './category';
-import Products from '../../containers/menu/products';
+import SubCategories from './sub_categories_container';
+import Categories from './category_container';
+import Products from './products';
 
-class MainMenuComponent extends Component {
+class MainMenuContainer extends Component {
   constructor(props){
     super(props)
   }
@@ -22,4 +22,4 @@ class MainMenuComponent extends Component {
   }
 
 }
-export default (MainMenuComponent)
+export default (MainMenuContainer)

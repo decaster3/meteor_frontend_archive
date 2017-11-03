@@ -32,8 +32,8 @@ class Products extends Component {
   }
 
   render () {
-    var products = this.state.products.map(product => {
-      return <Product product={product}/>
+    var products = this.state.products.map((product, index) => {
+      return <Product key={index} product={product}/>
     });
 
     if (products == null)

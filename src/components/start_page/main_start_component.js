@@ -40,8 +40,7 @@ class MainStartPage extends Component {
   }
 
   render () {
-    console.log(this.state.feacherView)
-
+    
     if(this.state.feacherView != null){
       return (
         <div>

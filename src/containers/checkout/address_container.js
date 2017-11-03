@@ -16,14 +16,14 @@ class AddressContainer extends Component {
   }
 
   componentDidMount(){
-    var city = this.props.geolocation.city;
+    this.loadAddresses(this.props);
+  }
+
+  loadAddresses(props){
+    var city = props.geolocation.city;
     if (!city || this.state.addresses.length != 0)
       return
 
-    this.loadAddresses(city);
-  }
-
-  loadAddresses(city){
     var addresses = [];
 
     firebase.database().ref().child('streets').child(city).once('value').then(function (snapshot) {
@@ -38,11 +38,7 @@ class AddressContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    var city = nextProps.geolocation.city;
-    if (!city || this.state.addresses.length != 0)
-      return
-
-    this.loadAddresses(city);
+    this.loadAddresses(nextProps);
   }
 
   render() {
